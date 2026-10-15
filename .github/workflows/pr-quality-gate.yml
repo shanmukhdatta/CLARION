@@ -1,0 +1,53 @@
+name: PR Quality Gate
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python-quality:
+    name: Python quality / ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+      - name: Install locked dependencies
+        run: uv sync --frozen --group dev
+      - name: Lint
+        run: uv run ruff check src tests
+      - name: Format
+        run: uv run ruff format --check src tests
+      - name: Types
+        run: uv run mypy
+      - name: Unit and offline tests
+        run: uv run pytest -q
+      - name: Build package
+        run: uv build
+      - name: Check wheel exists
+        run: test -n "$(find dist -name '*.whl' -print -quit)"
+  review-policy:
+    name: PR review policy
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require ready-for-review PR
+        env:
+          IS_DRAFT: ${{ github.event.pull_request.draft }}
+        run: |
+          if [ "$IS_DRAFT" = "true" ]; then
+            echo "::error::Mark the PR ready for review before merging."
+            exit 1
+          fi
+      - name: Human approval is required
+        run: echo "Configure branch rules to require independent approval and all Python quality checks."
