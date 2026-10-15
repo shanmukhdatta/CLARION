@@ -1,5 +1,79 @@
-# DESIGN STUB ONLY - NOT A VALID/INSTALLABLE PACKAGE YET.
-# P1.1: add project metadata, Python>=3.11, pinned runtime/dev extras and entry points.
-# P1.1: add Ruff, mypy, pytest, build and local reproducibility constraints.
-# P2/P3: introduce optional PyTorch/PyG/LightGBM extras only after matrix tests.
-# P5: verify wheel-building and wholly offline dependency mirror.
+# pyproject.toml — tells Python tools what CLARION is and how to build and install it.
+# P1.1 scope: packaging only. Runtime libraries are added in the phase that first uses them.
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clarion"
+dynamic = ["version"]  # read from src/clarion/__init__.py, see [tool.hatch.version]
+description = "Offline, explainable Bitcoin transaction and network-traffic intelligence (SIH26146)."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+# No license yet: README §22 defers it until dependency, dataset and GeoIP terms are checked.
+classifiers = [
+    "Private :: Do Not Upload",
+    "Development Status :: 2 - Pre-Alpha",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "pydantic>=2.14.1",
+    "pyyaml>=6.0.3",
+]
+
+[project.urls]
+Repository = "https://github.com/shanmukhdatta/CLARION"
+
+[project.scripts]
+clarion = "clarion.cli.main:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "types-pyyaml>=6.0.12.20260906",
+]
+
+[tool.hatch.version]
+path = "src/clarion/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/clarion"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/tests", "/README.md"]
+
+# --- Code quality: ruff = lint + format, mypy = type checks, pytest = tests ---
+
+[tool.ruff]
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle: basic style errors
+    "F",       # pyflakes: unused imports, undefined names
+    "I",       # import sorting
+    "B",       # bugbear: likely bugs
+    "UP",      # pyupgrade: modern syntax for Python 3.11+
+    "SIM",     # simplifications
+    "S",       # bandit: security (unsafe YAML/XML/pickle, shell calls)
+]
+ignore = ["E501"]  # line length is the formatter's job
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # pytest uses plain assert
+
+[tool.mypy]
+python_version = "3.11"  # check against the oldest supported Python
+strict = true
+files = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--strict-markers", "--strict-config", "--import-mode=importlib"]
+xfail_strict = true

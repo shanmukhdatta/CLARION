@@ -1,7 +1,9 @@
-# CLARION v4 — FILE BLUEPRINT ONLY. NOT FUNCTIONAL.
-# Intended path: configs/profiles/chain_only.yaml
-# Purpose: TODO: disable unsupported cross-layer models and display abstentions.
-# Phase: P1/P5
-# Contracts: See parent modules and the architecture specification. -> Versioned artifacts or typed interfaces; no implementation exists yet.
-# Acceptance: Require executable tests, provenance and review before marking complete.
-# Implementation will be added in a dedicated phase PR with tests and security review.
+# Analysis profile: blockchain evidence only. Network (wire) data is not used, and every
+# cross-layer signal reports ABSTAIN. The safe default (architecture spec §15.1 "Minimum").
+# Every key is required and unknown keys are rejected; schema: src/clarion/core/config.py.
+schema_version: 1
+kind: analysis
+name: chain_only
+description: Blockchain evidence only; cross-layer signals abstain.
+analysis_mode: chain_only
+cross_layer_gates: null

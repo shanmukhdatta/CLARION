@@ -1,7 +1,13 @@
-# CLARION v4 — FILE BLUEPRINT ONLY. NOT FUNCTIONAL.
-# Intended path: configs/profiles/cross_layer.yaml
-# Purpose: TODO: quality gates and evidence requirements.
-# Phase: P1/P5
-# Contracts: See parent modules and the architecture specification. -> Versioned artifacts or typed interfaces; no implementation exists yet.
-# Acceptance: Require executable tests, provenance and review before marking complete.
-# Implementation will be added in a dedicated phase PR with tests and security review.
+# Analysis profile: combine blockchain and network evidence, but only when the data passes
+# these quality gates; otherwise the run falls back to chain-only.
+# Every key is required and unknown keys are rejected; schema: src/clarion/core/config.py.
+schema_version: 1
+kind: analysis
+name: cross_layer
+description: Blockchain plus network evidence, gated on data quality.
+analysis_mode: cross_layer
+cross_layer_gates:
+  # Open decision D06 (docs/architecture/REQUIREMENTS_AUDIT.md). null = not decided yet,
+  # so the gate fails closed and runs stay chain-only until the team sets real values.
+  min_txid_join_coverage: null  # share of network observations whose TXID matches a transaction
+  max_clock_skew_ms: null  # largest tolerated sensor clock error, in milliseconds
