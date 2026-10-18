@@ -5,6 +5,12 @@
 **Target:** Linux, fully offline at inference time · **Repository status: architecture and documentation scaffold ONLY**  
 **Current stage:** Architecture gap audit and cross-component contract review. **No executable application, trained model, security test or completed benchmark is represented as working. Critical dataset and calibration decisions remain open.**
 
+### Start implementing CLARION — follow this first
+
+**[Beginner-friendly phase-by-phase implementation playbook](docs/development/implementation-playbook.md)** — the practical starting point for a new contributor. It explains the recommended **technology stack and libraries**, where to obtain **real Bitcoin datasets**, how to **generate synthetic CSV/JSON/XML when official data is missing**, how to structure and train baseline/GNN/stacked models without data leakage, what each existing repository module should implement, what deliverables to produce, and the **P0–P5 acceptance gates**. It also lists planned CLI interfaces clearly marked **not yet implemented**.
+
+**Read order:** [Implementation playbook](docs/development/implementation-playbook.md) → [data acquisition](docs/data/dataset-acquisition.md) → [canonical data dictionary](docs/data/data-dictionary.md) → [development workflow](docs/development/developer-guide.md) → your assigned module README. **Do not begin by training a model or implementing the dashboard before the P1 data/readiness/chain-only slice is verified.**
+
 ---
 
 ## 1. Product vision
