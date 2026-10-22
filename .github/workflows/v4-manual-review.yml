@@ -1,5 +1,10 @@
-name: CLARION v4 manual verification (opt-in)
+name: CLARION v4 validation
 on:
+  push:
+    branches:
+      - 'implementation/v4-static-code-orange-ui-20261022'
+      - main
+  pull_request:
   workflow_dispatch:
 jobs:
   python-contracts:
