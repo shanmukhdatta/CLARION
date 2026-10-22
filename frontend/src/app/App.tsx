@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { exportCaseAsJson, loadWorkspace } from "../lib/api";
+import CasesPage from "../features/cases/CasesPage";
 import type { GraphData, GraphEdge, Lead, Motif, Priority, WorkspaceData } from "../lib/types";
 
 type Page =
@@ -495,6 +496,7 @@ export default function App(){
     if(page==="patterns") return <Patterns data={data} onSelect={setSelected}/>;
     if(page==="signals") return <Signals data={data}/>;
     if(page==="propagation") return <PropagationPage data={data}/>;
+    if(page==="cases") return <CasesPage leads={data.leads} onOpenDossier={setSelected}/>;
     return <StatusPage data={data} kind={page} onSelect={setSelected}/>;
   };
   const sections=["Workspace","Intelligence","Operations"];

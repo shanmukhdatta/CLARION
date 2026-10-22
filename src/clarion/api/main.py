@@ -54,6 +54,7 @@ def create_app(run_dir: Path) -> FastAPI:
         allowed = {
             "run_manifest.json", "leads.json", "graph.json", "motifs.json",
             "propagation.json", "features.json", "entities.json",
+            "wire_sessions.json", "wire_features.json",
         }
         if name not in allowed:
             raise HTTPException(404, "unknown run resource")
@@ -124,6 +125,7 @@ def create_app(run_dir: Path) -> FastAPI:
             if name not in {
                 "graph.json", "motifs.json", "entities.json", "leads.json",
                 "features.json", "propagation.json", "quarantine.json",
+                "wire_sessions.json", "wire_features.json",
             }:
                 raise HTTPException(422, "unknown manifest artifact")
             target = root / name
@@ -134,6 +136,16 @@ def create_app(run_dir: Path) -> FastAPI:
             result[name] = "MATCH" if digest == expected else "MISMATCH"
         return {"valid": bool(declared) and all(x == "MATCH" for x in result.values()),
                 "artifacts": result, "note": "file hashes, not external cryptographic signatures"}
+
+    @app.get("/api/wire/sessions")
+    def sessions(limit: int = Query(100, ge=1, le=1000),
+                 offset: int = Query(0, ge=0)):
+        return read("wire_sessions.json")[offset: offset + limit]
+
+    @app.get("/api/wire/features")
+    def wire_features(limit: int = Query(100, ge=1, le=1000),
+                      offset: int = Query(0, ge=0)):
+        return read("wire_features.json")[offset: offset + limit]
 
     @app.get("/api/leads/query")
     def query_leads(

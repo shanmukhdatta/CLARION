@@ -1,4 +1,4 @@
-import type { EntityCandidate, GraphData, Lead, Motif, Propagation, RunManifest, WorkspaceData } from "./types";
+import type { CaseHistory, CaseRecord, EntityCandidate, GraphData, Lead, Motif, Propagation, ReviewRecord, ReviewStatus, RunManifest, WorkspaceData } from "./types";
 
 const TIMEOUT_MS = 12000;
 const BASE = "/api";
@@ -30,6 +30,45 @@ export async function loadWorkspace(): Promise<WorkspaceData> {
     request<EntityCandidate[]>("/entities?limit=1000").catch(() => []),
   ]);
   return { manifest, leads, graph, motifs, propagation, entities };
+}
+
+export async function getCase(txid: string): Promise<CaseRecord> {
+  if (!/^[a-f0-9]{64}$/.test(txid)) throw new Error("Invalid transaction ID");
+  return request<CaseRecord>(`/cases/${txid}`);
+}
+
+export async function getCaseHistory(txid: string): Promise<CaseHistory[]> {
+  if (!/^[a-f0-9]{64}$/.test(txid)) throw new Error("Invalid transaction ID");
+  return request<CaseHistory[]>(`/cases/${txid}/history`);
+}
+
+export async function saveCaseReview(
+  txid: string,
+  change: { status: ReviewStatus; note: string; expected_revision: number; request_id: string },
+  token: string,
+): Promise<ReviewRecord> {
+  if (!/^[a-f0-9]{64}$/.test(txid)) throw new Error("Invalid transaction ID");
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const response = await fetch(`${BASE}/cases/${txid}/review`, {
+      method: "POST", credentials: "same-origin", signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CLARION-REVIEW-TOKEN": token,
+      },
+      body: JSON.stringify(change),
+      cache: "no-store",
+    });
+    if (!response.ok) {
+      let reason = "";
+      try { reason = (await response.json() as { detail?: string }).detail ?? ""; }
+      catch { /* Server error may not be JSON. */ }
+      throw new Error(`Review update failed (${response.status})${reason ? ": " + reason : ""}`);
+    }
+    return await response.json() as ReviewRecord;
+  } finally { window.clearTimeout(timer); }
 }
 
 export async function exportCaseAsJson(lead: Lead, manifest: RunManifest): Promise<void> {
