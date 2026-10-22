@@ -144,6 +144,7 @@ def run(
     manifest: dict[str, Any] = {
         "kind": "EVIDENCE_FIRST_UNSUPERVISED_V4",
         "schema_version": "4.0-static",
+        "licence": licence, "source_origin": origin,
         "status": "CANDIDATE_LEADS_UNVALIDATED",
         "cutoff": when.isoformat(), "data_source_hashes": source.hashes,
         "readiness": {

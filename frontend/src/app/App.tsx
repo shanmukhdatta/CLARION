@@ -409,13 +409,23 @@ function PropagationPage({data}:{data:WorkspaceData}){
   </>;
 }
 
-function StatusPage({data,kind}:{data:WorkspaceData;kind:Page}){
+function StatusPage({data,kind,onSelect}:{data:WorkspaceData;kind:Page;onSelect:(lead:Lead)=>void}){
   const {manifest}=data;
   if(kind==="entities") return <>
     <PageHeader eyebrow="Uncertain graph hypotheses" title="Entity hypotheses"
       subtitle="Conservative common-input proposals; never identities inferred from host metadata."/>
-    <div className="card"><Empty title="No validated entity memberships available"
-      message="The demo does not contain independent multi-input evidence. MCER proposals need source witnesses and CoinJoin/service exclusions."/></div>
+    <div className="card">
+      {!data.entities.length ? <Empty title="No entity memberships proposed"
+        message="MCER needs independent multi-input witnesses and service/CoinJoin exclusions; single-input episodes do not justify merges."/>:
+        data.entities.map((e,i)=><div className="motif-row" key={e.entity_id??i}>
+          <div style={{display:"flex",justifyContent:"space-between"}}>
+            <strong className="mono-small">{e.entity_id??`Hypothesis ${i+1}`}</strong>
+            <Tag kind="warn">{e.status??"Tentative"}</Tag></div>
+          <p>{e.members.length} candidate addresses; not confirmed co-ownership</p>
+          <p className="mono-small">{e.members.slice(0,6).join(" · ")}</p>
+          <p>Witnesses: {(e.support??[]).slice(0,4).join(", ") || "No verified source references exported"}</p>
+        </div>)}
+    </div>
   </>;
   if(kind==="models") return <>
     <PageHeader eyebrow="Scientific evaluation" title="Models & evaluation"
@@ -457,8 +467,10 @@ function StatusPage({data,kind}:{data:WorkspaceData;kind:Page}){
   return <>
     <PageHeader eyebrow="Reviewable investigative evidence" title="Case dossiers"
       subtitle="Select a lead and export an evidence-linked JSON snapshot. A dossier is not proof of guilt."/>
-    <div className="card"><Empty title="Open a transaction from the leads queue"
-      message="Click any transaction under Investigation leads to inspect its witness path and export a dossier."/></div>
+    <div className="card">
+      {data.leads.length ? <LeadsTable leads={data.leads.slice(0,25)} onSelect={onSelect}/> :
+        <Empty title="No case leads" message="No investigation run has emitted a candidate transaction lead."/>}
+    </div>
   </>;
 }
 
@@ -483,7 +495,7 @@ export default function App(){
     if(page==="patterns") return <Patterns data={data} onSelect={setSelected}/>;
     if(page==="signals") return <Signals data={data}/>;
     if(page==="propagation") return <PropagationPage data={data}/>;
-    return <StatusPage data={data} kind={page}/>;
+    return <StatusPage data={data} kind={page} onSelect={setSelected}/>;
   };
   const sections=["Workspace","Intelligence","Operations"];
   return <>

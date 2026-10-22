@@ -1,4 +1,4 @@
-import type { GraphData, Lead, Motif, Propagation, RunManifest, WorkspaceData } from "./types";
+import type { EntityCandidate, GraphData, Lead, Motif, Propagation, RunManifest, WorkspaceData } from "./types";
 
 const TIMEOUT_MS = 12000;
 const BASE = "/api";
@@ -21,14 +21,15 @@ async function request<T>(path: string): Promise<T> {
 }
 
 export async function loadWorkspace(): Promise<WorkspaceData> {
-  const [manifest, leads, graph, motifs, propagation] = await Promise.all([
+  const [manifest, leads, graph, motifs, propagation, entities] = await Promise.all([
     request<RunManifest>("/manifest"),
     request<Lead[]>("/leads?limit=1000"),
     request<GraphData>("/graph"),
     request<Motif[]>("/motifs"),
     request<Propagation>("/propagation"),
+    request<EntityCandidate[]>("/entities?limit=1000").catch(() => []),
   ]);
-  return { manifest, leads, graph, motifs, propagation };
+  return { manifest, leads, graph, motifs, propagation, entities };
 }
 
 export async function exportCaseAsJson(lead: Lead, manifest: RunManifest): Promise<void> {

@@ -123,8 +123,8 @@ def _normalize(table: str, row: dict[str, Any], source_id: str) -> dict[str, Any
         r["available_at"] = _parse_time(r.get("available_at", r["event_time"]))
         r["coinbase"] = str(r.get("coinbase", "0")).lower() in ("true", "1")
         for key in ("vbytes", "fee_sats", "block_height"):
-            if key in r and r[key] not in (None, ""):
-                r[key] = _int(r[key])
+            if key in r:
+                r[key] = None if r[key] in (None, "") else _int(r[key])
         r.pop("case_id", None)
     elif table == "inputs":
         for key in ("vin", "prev_vout"):
@@ -140,6 +140,12 @@ def _normalize(table: str, row: dict[str, Any], source_id: str) -> dict[str, Any
         r["txid"] = r.get("txid") or None
         r["decode_provenance"] = r.get("decode_provenance", "observed_inv" if r["txid"] else "none")
         r["clock_uncertainty_ms"] = _int(r.get("clock_uncertainty_ms", "1000"))
+        if r.get("asn") == "":
+            r["asn"] = None
+        elif r.get("asn") is not None:
+            r["asn"] = _int(r["asn"])
+        if r.get("country") == "":
+            r["country"] = None
         r.pop("event", None)
     elif table == "labels":
         r["available_at"] = _parse_time(r["available_at"])

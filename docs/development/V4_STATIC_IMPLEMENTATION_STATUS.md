@@ -15,7 +15,7 @@ ground-truth labels are verified here.
 | 1B Wire | timestamped observed TXIDs/sensor dedup, separate host/ASN/country context | No genuine authorized P2P sensor evidence available; never infer origin/wallet owner |
 | 2 Graph | six typed nodes, allowlisted typed edges, as-of timestamps, PyG heterodata | Large-data tuning and historical entity versions not benchmarked |
 | 3 Representation | causal tabular features, degree baseline, optional SAGE/GAT training and hetero forward | Untrained hetero forward != validated trained GNN; temporal fold recomputation required |
-| 4 MCER | cautious common-input candidates, hard CoinJoin/service exclusions, tentative grouping | H2–H5 evidence calibration and longitudinal merge/split error require independent truth |
+| 4 MCER | cautious common-input candidates plus separate H1–H5 signed evidence ledger, tentative partition and version lineage | H2–H5 evidence calibration and longitudinal merge/split error require independent truth |
 | 5 Motifs | peel-like, equal-output CoinJoin-like, fan-in/out candidate witnesses | Proper wallet/service hard negatives and precision evaluation remain |
 | 6 Models | sklearn logistic/RF/IsolationForest, chrono OOF stack, optional PyG challenger | Independent real labels, proper model registry, calibrated probabilities, full temporal GNN training not validated |
 | 7 Δ | heldout CCA and global permutation gate, ABSTAIN fallback | Independent pairing, validated background/null, Δ2–Δ5 local components not established |

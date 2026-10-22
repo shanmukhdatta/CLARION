@@ -66,7 +66,14 @@ export interface Propagation {
   top_paths?: Record<string, string[]>;
   frozen_seed_hash?: string;
 }
+export interface EntityCandidate {
+  entity_id?: string;
+  members: string[];
+  support?: string[];
+  status?: string;
+}
 export interface WorkspaceData {
+  entities: EntityCandidate[];
   manifest: RunManifest;
   leads: Lead[];
   graph: GraphData;
