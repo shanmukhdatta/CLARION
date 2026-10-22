@@ -1,0 +1,22 @@
+{
+  "schema_version": "4.0",
+  "source_kind": "canonical",
+  "provenance": {
+    "licence": "REPLACE_WITH_VERIFIED_LICENSE_OR_PERMISSION",
+    "origin": "REPLACE_WITH_REAL_SOURCE_NAME",
+    "sensor_policy": "Never infer host wallet owner from observed relay"
+  },
+  "tables": {
+    "transactions": "transactions.csv",
+    "inputs": "inputs.csv",
+    "outputs": "outputs.csv",
+    "observations": "observations.csv",
+    "labels_optional_training_only": "labels.csv"
+  },
+  "readiness": {
+    "min_txid_join_coverage": null,
+    "max_clock_uncertainty_ms": null,
+    "statistical_dependence_verified": false
+  },
+  "warning": "Unknown actual provider columns MUST be explicitly mapped; not inferred."
+}
