@@ -55,6 +55,7 @@ def create_app(run_dir: Path) -> FastAPI:
             "run_manifest.json", "leads.json", "graph.json", "motifs.json",
             "propagation.json", "features.json", "entities.json",
             "wire_sessions.json", "wire_features.json",
+            "mcer_evidence.json", "mcer_partition.json", "monitoring.json",
         }
         if name not in allowed:
             raise HTTPException(404, "unknown run resource")
@@ -126,6 +127,7 @@ def create_app(run_dir: Path) -> FastAPI:
                 "graph.json", "motifs.json", "entities.json", "leads.json",
                 "features.json", "propagation.json", "quarantine.json",
                 "wire_sessions.json", "wire_features.json",
+                "mcer_evidence.json", "mcer_partition.json", "monitoring.json",
             }:
                 raise HTTPException(422, "unknown manifest artifact")
             target = root / name
@@ -136,6 +138,19 @@ def create_app(run_dir: Path) -> FastAPI:
             result[name] = "MATCH" if digest == expected else "MISMATCH"
         return {"valid": bool(declared) and all(x == "MATCH" for x in result.values()),
                 "artifacts": result, "note": "file hashes, not external cryptographic signatures"}
+
+    @app.get("/api/mcer/evidence")
+    def mcer_evidence(limit: int = Query(100, ge=1, le=1000),
+                      offset: int = Query(0, ge=0)):
+        return read("mcer_evidence.json")[offset: offset + limit]
+
+    @app.get("/api/mcer/partition")
+    def mcer_partition():
+        return read("mcer_partition.json")
+
+    @app.get("/api/monitoring")
+    def get_monitoring():
+        return read("monitoring.json")
 
     @app.get("/api/wire/sessions")
     def sessions(limit: int = Query(100, ge=1, le=1000),
