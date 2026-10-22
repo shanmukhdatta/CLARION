@@ -1,12 +1,15 @@
 """Read-only offline investigation dashboard. Only bind to loopback."""
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import APIRouter, FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
+
+from clarion.api.reviews import attach_review_routes
 
 HOME = """<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
 <title>CLARION | Local Investigator</title><style>
@@ -46,10 +49,23 @@ def create_app(run_dir: Path) -> FastAPI:
         app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets"), check_dir=False), name="assets")
 
     def read(name: str):
+        # Explicit allow-list stops arbitrary paths and prevents a DOS via giant
+        # generated case files. Canonical source files are never exposed.
+        allowed = {
+            "run_manifest.json", "leads.json", "graph.json", "motifs.json",
+            "propagation.json", "features.json", "entities.json",
+        }
+        if name not in allowed:
+            raise HTTPException(404, "unknown run resource")
         target = root / name
-        if not target.is_file():
+        if not target.is_file() or target.is_symlink():
             raise HTTPException(404, detail="run this project's investigate command first")
-        return json.loads(target.read_text(encoding="utf-8"))
+        if target.stat().st_size > 60_000_000:
+            raise HTTPException(413, "run artifact too large for JSON API")
+        try:
+            return json.loads(target.read_text(encoding="utf-8"))
+        except (ValueError, UnicodeError) as exc:
+            raise HTTPException(422, "invalid run artifact encoding") from exc
 
     @app.get("/", response_class=HTMLResponse)
     def home():
@@ -93,4 +109,70 @@ def create_app(run_dir: Path) -> FastAPI:
     def health():
         return {"status": "local", "read_only": True, "offline": True}
 
+    @app.get("/api/readiness")
+    def readiness():
+        return read("run_manifest.json").get("readiness", {})
+
+    @app.get("/api/provenance/verify")
+    def verify_evidence():
+        manifest = read("run_manifest.json")
+        declared = manifest.get("audit_sha256", {})
+        result = {}
+        for name, expected in declared.items():
+            if not isinstance(name, str) or name.startswith(".") or "/" in name or "\\\\" in name:
+                raise HTTPException(422, "invalid manifest artifact name")
+            if name not in {
+                "graph.json", "motifs.json", "entities.json", "leads.json",
+                "features.json", "propagation.json", "quarantine.json",
+            }:
+                raise HTTPException(422, "unknown manifest artifact")
+            target = root / name
+            if not target.is_file():
+                result[name] = "MISSING"
+                continue
+            digest = hashlib.sha256(target.read_bytes()).hexdigest()
+            result[name] = "MATCH" if digest == expected else "MISMATCH"
+        return {"valid": bool(declared) and all(x == "MATCH" for x in result.values()),
+                "artifacts": result, "note": "file hashes, not external cryptographic signatures"}
+
+    @app.get("/api/leads/query")
+    def query_leads(
+        q: str = Query("", max_length=256),
+        priority: str | None = Query(None, pattern="^P[1-4]$"),
+        sort: str = Query("risk", pattern="^(risk|time)$"),
+        limit: int = Query(100, ge=1, le=500),
+        offset: int = Query(0, ge=0),
+    ):
+        results = [
+            row for row in read("leads.json")
+            if (not priority or row.get("priority") == priority)
+            and (not q or q.lower() in str(row.get("txid", "")).lower()
+                 or q.lower() in str(row.get("case_id", "")).lower())
+        ]
+        if sort == "time":
+            results.sort(key=lambda row: str(row.get("time", "")), reverse=True)
+        else:
+            results.sort(key=lambda row: float(row.get("risk_points", 0)), reverse=True)
+        return {"total": len(results), "items": results[offset:offset + limit]}
+
+    @app.get("/api/graph/neighborhood")
+    def graph_neighborhood(
+        txid: str = Query(pattern=r"^[0-9a-f]{64}$"),
+        limit: int = Query(150, ge=1, le=500),
+    ):
+        graph = read("graph.json")
+        root_id = "tx:" + txid
+        edges = [
+            edge for edge in graph.get("edges", [])
+            if edge.get("source") == root_id or edge.get("target") == root_id
+        ][:limit]
+        node_ids = {root_id}
+        for edge in edges:
+            node_ids.update((edge.get("source"), edge.get("target")))
+        return {"nodes": [n for n in graph.get("nodes", []) if n.get("id") in node_ids],
+                "edges": edges, "bounded": True}
+
+    review_router = APIRouter()
+    attach_review_routes(review_router, root, read)
+    app.include_router(review_router)
     return app
