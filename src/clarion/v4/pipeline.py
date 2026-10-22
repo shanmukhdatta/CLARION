@@ -12,16 +12,16 @@ import hashlib
 import json
 from collections import Counter
 from dataclasses import asdict
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from clarion.v4.analysis import (
     final_priority, local_priority, mcer_candidates, pattern_candidates, propagate,
 )
-from clarion.v4.contracts import Mode, utc
+from clarion.v4.contracts import utc
 from clarion.v4.graph import build_snapshot, feature_rows, graph_export
-from clarion.v4.ingest import ImportResult, import_canonical
+from clarion.v4.ingest import import_canonical
 from clarion.v4.ml import fit_temporal_stack, novelty_ranking
 
 

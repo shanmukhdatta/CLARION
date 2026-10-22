@@ -12,19 +12,17 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import Any, Iterable, TypeVar
-from xml.etree import ElementTree
+from typing import Any, Iterable
 
 from pydantic import ValidationError
 
 from clarion.v4.contracts import (
-    EvidenceSource, Input, Label, Output, Tx, WireObservation,
+    Input, Label, Output, Tx, WireObservation,
 )
 
 MAX_FILE_BYTES = 80_000_000
 MAX_ROWS = 250_000
 MAX_XML_BYTES = 2_000_000
-T = TypeVar("T")
 
 
 def btc_to_sats(value: str) -> int:
@@ -203,7 +201,9 @@ def import_bitcoin_core_tx(tx: dict[str, Any], *, source_id: str, available_at: 
 
     Bitcoin Core prevout is not assured; unresolved value and fee stay null.
     """
-    when = _parse_time(tx.get("blocktime", tx.get("time"))) if "blocktime" in tx or "time" in tx else available_at
+    raw_time = tx.get("blocktime", tx.get("time"))
+    when = (datetime.fromtimestamp(raw_time, tz=timezone.utc) if isinstance(raw_time, (int, float))
+            else _parse_time(raw_time) if raw_time is not None else available_at)
     inputs = []
     coinbase = any("coinbase" in v for v in tx.get("vin", []))
     for vin_no, v in enumerate(tx.get("vin", [])):

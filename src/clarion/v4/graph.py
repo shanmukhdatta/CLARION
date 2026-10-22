@@ -27,8 +27,9 @@ def build_snapshot(
     does NOT assert that statistical dependence or causation has been validated.
     """
     cutoff = utc(cutoff)
-    tx = {v.txid: v for v in transactions if v.available_at <= cutoff and v.event_time <= cutoff}
-    if len(tx) != len(set(tx)):
+    selected_tx = [v for v in transactions if v.available_at <= cutoff and v.event_time <= cutoff]
+    tx = {v.txid: v for v in selected_tx}
+    if len(tx) != len(selected_tx):
         raise ValueError("duplicate TXIDs")
     outs: dict[tuple[str, int], Output] = {}
     for o in outputs:

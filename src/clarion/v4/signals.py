@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from math import isfinite
-from typing import Any, Sequence
+from typing import Sequence
 
 from clarion.v4.contracts import Abstention
 
@@ -29,8 +29,6 @@ def delta_signal(
         raise ValueError("invalid scientific test controls")
     from numpy import asarray, corrcoef, random
     from sklearn.cross_decomposition import CCA
-    from sklearn.impute import SimpleImputer
-    from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import StandardScaler
     import numpy as np
 

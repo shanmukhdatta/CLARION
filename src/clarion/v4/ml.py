@@ -6,8 +6,6 @@ synthetic labels MUST NOT be deployed as calibrated real-world criminality predi
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
-from hashlib import sha256
 from typing import Any, Sequence
 
 
@@ -61,10 +59,10 @@ def fit_temporal_stack(
     if not (0.1 <= holdout_share <= 0.4) or folds < 2:
         raise ValueError("invalid split or fold controls")
     ordered = sorted(feature_rows, key=lambda r: (str(r["available_at"]), str(r["subject_id"])))
-    eligible = [
-        r for r in ordered if str(r["subject_id"]) in labels
-        and labels[str(r["subject_id"])][1] <= str(r["available_at"])
-    ]
+    # Labels are normally assigned AFTER the underlying transaction.
+    # Their availability is checked against each fold's training cutoff,
+    # not incorrectly against the event timestamp itself.
+    eligible = [r for r in ordered if str(r["subject_id"]) in labels]
     if len(eligible) < 50:
         raise ValueError("at least 50 temporally eligible labeled rows required")
     # Group by explicitly supplied temporal-independent case, default each tx.
@@ -77,10 +75,16 @@ def fit_temporal_stack(
     cut = int((1 - holdout_share) * len(ordered_groups))
     if cut <= folds * 2 or cut >= len(ordered_groups):
         raise ValueError("too few independent temporal groups")
-    historical = [r for gid in ordered_groups[:cut] for r in grouped[gid]]
     future = [r for gid in ordered_groups[cut:] for r in grouped[gid]]
-    if max(str(r["available_at"]) for r in historical) >= min(str(r["available_at"]) for r in future):
-        raise ValueError("overlapping group windows; must purge boundary groups")
+    # Supervised fit only uses historical labels known by the start of the
+    # untouched future holdout; otherwise abstain rather than leak labels.
+    future_start = min(str(r["available_at"]) for r in future)
+    historical = [
+        r for gid in ordered_groups[:cut] for r in grouped[gid]
+        if labels[str(r["subject_id"])][1] <= future_start
+    ]
+    if not historical or max(str(r["available_at"]) for r in historical) >= future_start:
+        raise ValueError("overlapping group windows or unavailable historical labels")
     y = np.array([labels[str(r["subject_id"])][0] for r in historical], dtype=int)
     y_future = np.array([labels[str(r["subject_id"])][0] for r in future], dtype=int)
     if set(y) != {0, 1}:
@@ -111,9 +115,13 @@ def fit_temporal_stack(
     for past_group_idx, valid_group_idx in splitter.split(ordered_groups[:cut]):
         before = {ordered_groups[i] for i in past_group_idx}
         after = {ordered_groups[i] for i in valid_group_idx}
-        prev = [index[id(r)] for gid in before for r in grouped[gid]]
-        curr = [index[id(r)] for gid in after for r in grouped[gid]]
-        if set(y[prev]) != {0, 1}:
+        validation_start = min(str(r["available_at"]) for gid in after for r in grouped[gid])
+        prev = [
+            index[id(r)] for gid in before for r in grouped[gid]
+            if id(r) in index and labels[str(r["subject_id"])][1] <= validation_start
+        ]
+        curr = [index[id(r)] for gid in after for r in grouped[gid] if id(r) in index]
+        if not prev or not curr or set(y[prev]) != {0, 1}:
             continue
         models = [learner("logistic"), learner("forest")]
         for model in models:

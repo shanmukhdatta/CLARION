@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import {
   Activity, ArrowDownRight, ArrowRight, BarChart3, BookOpenText, CheckCircle2,
   ChevronDown, CircleAlert, CircleHelp, Clock3, Copy, Download, FileSearch,
@@ -34,12 +35,12 @@ const readable = (text: string) => text.replaceAll("_", " ").replaceAll("-", " "
 const simpleTime = (date?: string | null) => date ? new Date(date).toLocaleString() : "Latest snapshot";
 const PRIORITIES: Priority[] = ["P1", "P2", "P3", "P4"];
 
-function Tag({ children, kind }: { children: React.ReactNode; kind: string }) {
+function Tag({ children, kind }: { children: ReactNode; kind: string }) {
   return <span className={`badge ${kind.toLowerCase()}`}>{children}</span>;
 }
 
 function PageHeader({ eyebrow, title, subtitle, action }: {
-  eyebrow: string; title: string; subtitle: string; action?: React.ReactNode;
+  eyebrow: string; title: string; subtitle: string; action?: ReactNode;
 }) {
   return (
     <div className="page-head">
@@ -49,7 +50,7 @@ function PageHeader({ eyebrow, title, subtitle, action }: {
   );
 }
 
-function Info({ name, value }: { name: string; value: React.ReactNode }) {
+function Info({ name, value }: { name: string; value: ReactNode }) {
   return <div className="info-pair"><span>{name}</span><strong>{value}</strong></div>;
 }
 
