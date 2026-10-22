@@ -8,8 +8,8 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
-from dataclasses import dataclass
 from collections.abc import Iterable
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path

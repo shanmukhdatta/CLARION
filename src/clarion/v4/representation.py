@@ -10,7 +10,6 @@ from typing import Any
 
 from clarion.v4.contracts import Snapshot, utc
 
-
 NODE_TYPES = ("tx", "addr", "entity", "host", "asn", "country")
 
 

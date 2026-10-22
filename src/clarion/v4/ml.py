@@ -9,7 +9,6 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
 
-
 FEATURES = (
     "inputs", "outputs", "output_sats", "fee_rate",
     "largest_output_share", "min_output_share", "age_seconds",
