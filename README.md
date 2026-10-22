@@ -823,3 +823,9 @@ economic Π can be honestly asserted without actual evidence.
 wallet-owner relationship; Country is context only; absent independent paired
 evidence or goals means ABSTAIN; synthetic labels are training/evaluation fixtures
 and never evidence of guilt. Avoid merging without downstream integration checks.
+
+<!-- CLARION_FOLDER_INDEX_LINK -->
+## Folder-by-folder technical architecture and implementation audit
+
+Browse [all 103 folder READMEs](docs/FOLDER_README_INDEX.md) for a file index, diagrams, interfaces, technologies and status. [Feature coverage audit](docs/architecture/FEATURE_IMPLEMENTATION_AUDIT.md) separates tested synthetic paths, partial methods and missing real-world evidence.
+<!-- /CLARION_FOLDER_INDEX_LINK -->
