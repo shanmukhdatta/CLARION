@@ -1,7 +1,53 @@
-// CLARION v4 — FILE BLUEPRINT ONLY. NOT FUNCTIONAL.
-// Intended path: frontend/src/lib/api.ts
-// Purpose: TODO: typed local-only API client and failure states.
-// Phase: P4
-// Contracts: See parent modules and the architecture specification. -> Versioned artifacts or typed interfaces; no implementation exists yet.
-// Acceptance: Require executable tests, provenance and review before marking complete.
-// Implementation will be added in a dedicated phase PR with tests and security review.
+import type { EntityCandidate, GraphData, Lead, Motif, Propagation, RunManifest, WorkspaceData } from "./types";
+
+const TIMEOUT_MS = 12000;
+const BASE = "/api";
+
+async function request<T>(path: string): Promise<T> {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const response = await fetch(BASE + path, {
+      signal: controller.signal,
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText} on ${path}`);
+    return await response.json() as T;
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+export async function loadWorkspace(): Promise<WorkspaceData> {
+  const [manifest, leads, graph, motifs, propagation, entities] = await Promise.all([
+    request<RunManifest>("/manifest"),
+    request<Lead[]>("/leads?limit=1000"),
+    request<GraphData>("/graph"),
+    request<Motif[]>("/motifs"),
+    request<Propagation>("/propagation"),
+    request<EntityCandidate[]>("/entities?limit=1000").catch(() => []),
+  ]);
+  return { manifest, leads, graph, motifs, propagation, entities };
+}
+
+export async function exportCaseAsJson(lead: Lead, manifest: RunManifest): Promise<void> {
+  const report = {
+    kind: "CLARION_INVESTIGATIVE_LEAD",
+    warning: "Lead only. Not a declaration of wrongdoing, identity or ownership.",
+    evidence_cutoff: manifest.cutoff ?? null,
+    source_hashes: manifest.data_source_hashes ?? {},
+    lead,
+  };
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  try {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `clarion-case-${lead.txid.slice(0, 12)}.json`;
+    link.click();
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}

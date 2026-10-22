@@ -1,5 +1,5 @@
-/* CLARION v4 - DESIGN BLUEPRINT ONLY, NOT STYLESHEET IMPLEMENTATION.
- * Purpose: Safe local PDF/print styles and redacted dossier layout.
- * Phase P4: add CSS with offline assets and accessibility contrast tests.
- * No actual CSS declarations exist yet.
- */
+@media print{
+  .sidebar,.mobile-nav,.topbar,.primary-btn,.secondary-btn,.filters{display:none!important}
+  .content{padding:0!important}.card{break-inside:avoid;border-color:#ddd}
+  body{background:#fff;color:#111}
+}

@@ -791,3 +791,35 @@ flowchart TD
 **Release acceptance story:** on a disconnected Linux computer with locally preinstalled compatible assets, a reviewer imports an allowed evidence file, sees a truthful readiness decision, reconstructs a source-linked graph, receives a supported lead with available/abstained signals, explores bounded propagation, and exports an audited report. Any absent data or invalid label is handled openly. A separate research report compares simple baselines and advanced models on genuinely eligible holdouts.
 
 > **Documentation status:** Sections 24–40 describe **how to implement and validate** every original block while preserving sections 1–23. They do not assert those features, trained checkpoints, dataset joins, model accuracy or offline application have been implemented or tested. Follow [module folders](src/clarion/README.md) and [definition of done](docs/development/definition-of-done.md) to promote each stage from design → implemented → verified.
+
+---
+
+## 41. Static v4 code and orange/white frontend — October 22, 2026
+
+**Read this update before treating the architecture as implemented or validated.**
+The original sections 1–40 above have been preserved. The new implementation
+branch adds substantial **statically authored** Python/React code while leaving
+research premises and scientific verification explicitly conditional.
+
+- [Beginner setup and later commands](docs/development/V4_BEGINNER_START_HERE.md)
+- [Exact canonical data pipeline and schemas](docs/development/V4_PIPELINES_AND_SCHEMAS.md)
+- [Block-by-block implementation audit and unverified status](docs/development/V4_STATIC_IMPLEMENTATION_STATUS.md)
+- Python modules: `src/clarion/v4/` (contracts, ingestion, UTXO graph,
+  MCER H1–H5 proposal ledger, motifs, models, Δ/Π gates, risk fusion,
+  propagation, storage, evaluation, reports and security)
+- React application: `frontend/` (minimalist terracotta orange/white, offline
+  pages for overview/leads/graph/patterns/entities/Δ/Π/propagation/models/cases/audit)
+- Canonical local CLI: `scripts/v4_pipeline.py`
+- Bitcoin Core converter: `scripts/data/prepare_bitcoin_core.py`
+- Static tests: `tests/v4/`. Opt-in verification: `.github/workflows/v4-manual-review.yml`
+
+**Not verified:** The newly authored source, tests, TypeScript build and training
+were intentionally not executed during this pass. Several earlier module stubs
+remain, and the new modules do not certify full production implementation.
+No real-world AML accuracy, independently valid chain–wire Δ, or verified
+economic Π can be honestly asserted without actual evidence.
+
+**Science-first default:** questionable network observation never means a
+wallet-owner relationship; Country is context only; absent independent paired
+evidence or goals means ABSTAIN; synthetic labels are training/evaluation fixtures
+and never evidence of guilt. Avoid merging without downstream integration checks.
