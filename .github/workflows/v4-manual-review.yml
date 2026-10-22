@@ -1,0 +1,27 @@
+name: CLARION v4 manual verification (opt-in)
+on:
+  workflow_dispatch:
+jobs:
+  python-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e . -r requirements-v4.txt pytest ruff
+      - run: python -m pytest -q tests/v4
+      - run: python -m ruff check src/clarion/v4 scripts/v4_pipeline.py tests/v4
+  react-typescript:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run build
