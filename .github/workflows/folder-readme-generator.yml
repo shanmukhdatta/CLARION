@@ -1,0 +1,47 @@
+name: Generate CLARION folder README guides
+on:
+  push:
+    branches:
+      - docs/architecture-folder-guides-20261022
+    paths:
+      - scripts/docs/generate_folder_readmes.py
+      - .github/workflows/folder-readme-generator.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate all tracked-folder READMEs and central index
+        run: python scripts/docs/generate_folder_readmes.py --write
+      - name: Assert all generated files are up to date
+        run: python scripts/docs/generate_folder_readmes.py --check
+      - name: Require README in every tracked source folder
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess
+          files=subprocess.check_output(['git','ls-files'],text=True).splitlines()
+          dirs={p for f in files for p in [str(pathlib.PurePosixPath(*pathlib.PurePosixPath(f).parts[:i])) for i in range(1,len(pathlib.PurePosixPath(f).parts))]}
+          missing=[p for p in sorted(dirs) if not (pathlib.Path(p)/'README.md').is_file()]
+          print('Documented tracked directories:', len(dirs))
+          assert not missing, 'Missing folder README: '+str(missing[:15])
+          PY
+      - name: Commit generated README updates to documentation branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- README.md docs/FOLDER_README_INDEX.md ':(glob)**/README.md'
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: update every tracked folder README, diagrams and central index"
+            git push origin HEAD:docs/architecture-folder-guides-20261022
+          fi
