@@ -9,7 +9,6 @@ import hashlib
 import json
 from math import exp, isfinite
 from pathlib import Path
-from typing import Any
 
 from clarion.v4.ml import FEATURES
 

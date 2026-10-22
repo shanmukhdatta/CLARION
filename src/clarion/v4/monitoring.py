@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from math import isfinite, log
 from typing import Any
 
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import secrets
 from uuid import uuid4
 
 from fastapi.testclient import TestClient
@@ -10,7 +11,7 @@ from fastapi.testclient import TestClient
 from clarion.api.main import create_app
 
 TXID = "a" * 64
-TOKEN = "locally-generated-unshared-review-token"
+TOKEN = secrets.token_urlsafe(32)
 
 
 def setup_run(folder):
