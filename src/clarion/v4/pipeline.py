@@ -25,8 +25,8 @@ from clarion.v4.analysis import (
 from clarion.v4.contracts import utc
 from clarion.v4.graph import build_snapshot, feature_rows, graph_export
 from clarion.v4.ingest import import_canonical
-from clarion.v4.ml import fit_temporal_stack, novelty_ranking
 from clarion.v4.mcer import conservative_partition, h1_common_inputs, h2_change_hypotheses
+from clarion.v4.ml import fit_temporal_stack, novelty_ranking
 from clarion.v4.monitoring import source_quality_report
 from clarion.v4.motifs_extended import additional_motifs
 from clarion.v4.wire_sessions import build_sessions, wire_feature_rows

@@ -3,9 +3,15 @@ on:
   push:
     branches:
       - docs/architecture-folder-guides-20261022
+      - implementation/full-requirements-integration-20261022
     paths:
       - scripts/docs/generate_folder_readmes.py
       - .github/workflows/folder-readme-generator.yml
+      - 'src/**'
+      - 'frontend/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'docs/**'
   workflow_dispatch:
 
 permissions:
@@ -46,5 +52,5 @@ jobs:
           git reset -q HEAD -- .github/workflows/README.md
           if ! git diff --cached --quiet; then
             git commit -m "docs: update every tracked folder README, diagrams and central index"
-            git push origin HEAD:docs/architecture-folder-guides-20261022
+            git push origin HEAD:${GITHUB_REF_NAME}
           fi
