@@ -250,11 +250,11 @@ def generate_for(root: Path, rel: str, children: dict[str, list[str]], names: di
     listing = ["| Entry | Technical responsibility | State |", "|---|---|---|"]
     for name in tracked:
         path = folder / name
-        listing.append(f"| [\`{name}\`]({quote(name, safe='._-')}) | {description(path).replace('|', '/')} | {file_status(path)} |")
+        listing.append(f"| [`{name}`]({quote(name, safe='._-')}) | {description(path).replace('|', '/')} | {file_status(path)} |")
     if not tracked:
         listing.append("| *(none)* | Folder groups child modules / future files | — |")
     children_rows = (
-        "\n".join(f"- [\`{name}/\`](./{quote(name, safe='._-')}/README.md) — {role(rel+'/'+name)[1]}." for name in subfolders)
+        "\n".join(f"- [`{name}/`](./{quote(name, safe='._-')}/README.md) — {role(rel+'/'+name)[1]}." for name in subfolders)
         if subfolders else "No tracked child folders."
     )
     cross_arch = Path("docs/architecture/architecture-v4-spec.md")
@@ -276,13 +276,13 @@ def generate_for(root: Path, rel: str, children: dict[str, list[str]], names: di
 6. [Validation and work remaining](#validation-and-work-remaining-{label.replace('_','-')})
 
 ### Purpose and actual status ({label})
-**Path:** \`{rel}/\`  
+**Path:** `{rel}/`  
 **Responsibility:** {purpose}.  
 **Consumes:** {intro}.  
 **Produces:** {output}.  
 **Current direct-file inventory:** {states}.
 
-**Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily \`src/clarion/application/engine.py\`, \`src/clarion/application/training_demo.py\`, \`src/clarion/api/main.py\` and \`src/clarion/v4/\`, with the React screens in \`frontend/src/app/App.tsx\`. Other files may be placeholders.
+**Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
 ### Files directly in this folder ({label})
 {chr(10).join(listing)}
@@ -291,16 +291,16 @@ def generate_for(root: Path, rel: str, children: dict[str, list[str]], names: di
 {children_rows}
 
 ### Technical architecture diagram ({label})
-\`\`\`mermaid
+```mermaid
 {diagram(label,rel,intro,purpose,output)}
-\`\`\`
+```
 
 ### Tech stack and interfaces ({label})
 **Technologies:** {tech}
 
 **Input boundary:** {intro}.  
 **Output boundary:** {output}.  
-**Causal/evidence invariants:** Preserve source SHA-256, UTC \`event_time\` and \`available_at\`, explicit score type and \`ABSTAIN\` when required. Observed relay TXIDs never establish transaction origin or wallet ownership; candidate entity links are not confirmed identity; Country is non-scoring context.
+**Causal/evidence invariants:** Preserve source SHA-256, UTC `event_time` and `available_at`, explicit score type and `ABSTAIN` when required. Observed relay TXIDs never establish transaction origin or wallet ownership; candidate entity links are not confirmed identity; Country is non-scoring context.
 
 **System contracts:** [original §0–§12 specification]({prefix}docs/architecture/architecture-v4-spec.md) · [implemented versus planned matrix]({prefix}docs/architecture/FEATURE_IMPLEMENTATION_AUDIT.md) · [canonical schemas and pipeline]({prefix}docs/development/V4_PIPELINES_AND_SCHEMAS.md).
 
@@ -308,7 +308,7 @@ def generate_for(root: Path, rel: str, children: dict[str, list[str]], names: di
 - **Required gate:** {risk}.
 - Verify the exact entrypoint and source file before using a planned module; avoid importing comment-only blueprints.
 - For executable changes run affected Python/TypeScript tests, offline checks and canonical synthetic smoke validation. Real-data ML calibration, service negative controls and SIH capture semantics still need independent evidence.
-- Record new inputs/outputs, schema versions and proven tests in this README; rerun \`python scripts/docs/generate_folder_readmes.py --write\` to refresh its indexed section.
+- Record new inputs/outputs, schema versions and proven tests in this README; rerun `python scripts/docs/generate_folder_readmes.py --write` to refresh its indexed section.
 
 {END}
 """.lstrip("\n")
@@ -338,7 +338,7 @@ def main() -> int:
     changed = []
     for rel in sorted(dirs):
         path = root / rel / "README.md"
-        prior = path.read_text(encoding="utf-8") if path.is_file() else f"# \`{rel}/\` — CLARION folder guide\n"
+        prior = path.read_text(encoding="utf-8") if path.is_file() else f"# `{rel}/` — CLARION folder guide\n"
         if START in prior:
             if END not in prior:
                 raise ValueError(f"unclosed marker in {path}")
@@ -357,7 +357,7 @@ def main() -> int:
     lines = [
         "# CLARION — Every-folder technical README index",
         "",
-        f"**Coverage:** {len(dirs)} tracked folders; each should contain \`README.md\`.",
+        f"**Coverage:** {len(dirs)} tracked folders; each should contain `README.md`.",
         "Generated deterministically from Git-tracked file paths. This is a navigation index, **not proof of feature completion**.",
         "",
         "## Contents", "",
@@ -368,7 +368,7 @@ def main() -> int:
         lines.extend([f"## {group}", ""])
         for rel in paths:
             _, purpose, _, _ = role(rel)
-            lines.append(f"- [\`{rel}/README.md\`](../{quote(rel, safe='/._-')}/README.md) — {purpose}.")
+            lines.append(f"- [`{rel}/README.md`](../{quote(rel, safe='/._-')}/README.md) — {purpose}.")
         lines.append("")
     index = "\n".join(lines).rstrip() + "\n"
     if not index_path.exists() or index_path.read_text(encoding="utf-8") != index:
