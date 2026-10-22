@@ -6,7 +6,6 @@ evidence of a cyclic money transfer or a particular wallet controller.
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime
 
 from clarion.v4.contracts import Snapshot, evidence_id
 

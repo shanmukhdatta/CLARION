@@ -145,6 +145,13 @@ def _normalize(table: str, row: dict[str, Any], source_id: str) -> dict[str, Any
             r["asn"] = _int(r["asn"])
         if r.get("country") == "":
             r["country"] = None
+        if "src_port" in r:
+            r["source_port"] = r.pop("src_port")
+        if "dst_port" in r:
+            r["destination_port"] = r.pop("dst_port")
+        for key in ("source_port", "destination_port"):
+            if key in r:
+                r[key] = None if r[key] in ("", None) else _int(r[key])
         r.pop("event", None)
     elif table == "labels":
         r["available_at"] = _parse_time(r["available_at"])

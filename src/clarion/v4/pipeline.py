@@ -27,6 +27,8 @@ from clarion.v4.contracts import utc
 from clarion.v4.graph import build_snapshot, feature_rows, graph_export
 from clarion.v4.ingest import import_canonical
 from clarion.v4.ml import fit_temporal_stack, novelty_ranking
+from clarion.v4.motifs_extended import additional_motifs
+from clarion.v4.wire_sessions import build_sessions, wire_feature_rows
 
 
 def save_json(path: Path, data: Any) -> None:
@@ -79,8 +81,10 @@ def run(
         max_clock_uncertainty_ms=max_clock_uncertainty_ms,
     )
     features = feature_rows(snapshot)
-    patterns = pattern_candidates(snapshot)
+    patterns = pattern_candidates(snapshot) + additional_motifs(snapshot)
     entities = mcer_candidates(snapshot)
+    sessions = build_sessions(snapshot.wire, cutoff=snapshot.cutoff)
+    wire_features = wire_feature_rows(snapshot.wire, cutoff=snapshot.cutoff)
     pattern_count: Counter[str] = Counter(str(p["subject_id"]) for p in patterns)
     if len(features) >= 10:
         novelty = {str(row["subject_id"]): float(row["novelty_rank"])
@@ -134,6 +138,8 @@ def run(
     save_json(folder / "entities.json", [asdict(x) for x in entities])
     save_json(folder / "leads.json", leads)
     save_json(folder / "features.json", features)
+    save_json(folder / "wire_sessions.json", [session.as_dict() for session in sessions])
+    save_json(folder / "wire_features.json", wire_features)
     save_json(folder / "quarantine.json", source.quarantine)
     save_json(folder / "propagation.json", {
         "max_hops": propagated["max_hops"], "capacity_points": 25,
@@ -164,6 +170,7 @@ def run(
         "n_chain_edges": sum(e.relation == "spends_outpoint" for e in snapshot.edges),
         "n_wire_observations": len(snapshot.wire),
         "n_entities": len(entities), "n_quarantined_rows": len(source.quarantine),
+        "n_wire_sessions": len(sessions), "n_wire_feature_rows": len(wire_features),
         "training_score_type": "UNSUPERVISED_RANK_NOT_PROBABILITY",
         "unvalidated_real_world_performance": True,
         "research_limitations": [
@@ -177,7 +184,8 @@ def run(
     manifest["audit_sha256"] = {
         name: hashlib.sha256((folder / name).read_bytes()).hexdigest()
         for name in ("graph.json", "motifs.json", "entities.json", "leads.json",
-                     "features.json", "propagation.json", "quarantine.json")
+                     "features.json", "wire_sessions.json", "wire_features.json",
+                     "propagation.json", "quarantine.json")
     }
     save_json(folder / "run_manifest.json", manifest)
     return manifest
