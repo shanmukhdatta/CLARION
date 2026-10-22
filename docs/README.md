@@ -45,7 +45,7 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Preserve decisions and observed implementation status.  
 **Consumes:** Original CLARION architecture and code contracts.  
 **Produces:** traceable system documentation.  
-**Current direct-file inventory:** Specification or guide: 1.
+**Current direct-file inventory:** Specification or guide: 2.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -53,6 +53,7 @@ Do not add executable logic before the assigned phase PR; update this README whe
 | Entry | Technical responsibility | State |
 |---|---|---|
 | [`DOCUMENTATION_CONVENTIONS.md`](DOCUMENTATION_CONVENTIONS.md) | DOCUMENTATION_CONVENTIONS.md — planned content | Specification or guide |
+| [`FOLDER_README_INDEX.md`](FOLDER_README_INDEX.md) | CLARION — Every-folder technical README index | Specification or guide |
 
 ### Child modules and navigation (docs)
 - [`adr/`](./adr/README.md) — Record approved architectural reasoning.
