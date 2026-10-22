@@ -9,7 +9,7 @@ import hashlib
 import json
 import sqlite3
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from clarion.v4.contracts import Snapshot
 

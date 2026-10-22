@@ -5,9 +5,9 @@ proof. Calling estimators alone does not establish scientific validity.
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from math import isfinite
-from typing import Sequence
 
 from clarion.v4.contracts import Abstention
 
@@ -27,10 +27,10 @@ def delta_signal(
         return Abstention(reason="too few externally independent chain-wire pairs", missing=("independent_pairs",))
     if not (0.1 <= holdout_fraction < 0.5) or permutations < 100:
         raise ValueError("invalid scientific test controls")
+    import numpy as np
     from numpy import asarray, corrcoef, random
     from sklearn.cross_decomposition import CCA
     from sklearn.preprocessing import StandardScaler
-    import numpy as np
 
     keys = set(pairs[0])
     ck = sorted(k for k in keys if k.startswith("chain_"))
@@ -115,7 +115,6 @@ def pi_signal(goal: VerifiedEconomicGoal) -> dict[str, object] | Abstention:
     if all(v is None for v in components.values()):
         return Abstention(reason="no unit-bearing actual and baseline cost pairs")
     available = [v for v in components.values() if v is not None]
-    assert available
     return {
         "status": "PARTIAL_VERIFIED_GOAL", "goal_id": goal.goal_id,
         "component_ratios": components,

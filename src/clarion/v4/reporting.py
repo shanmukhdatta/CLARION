@@ -14,7 +14,7 @@ def case_export(run_dir: str | Path, txid: str, out_dir: str | Path) -> dict[str
     root=Path(run_dir)
     manifest=json.loads((root/"run_manifest.json").read_text(encoding="utf-8"))
     leads=json.loads((root/"leads.json").read_text(encoding="utf-8"))
-    selected=next((l for l in leads if l["txid"]==txid),None)
+    selected=next((lead for lead in leads if lead["txid"]==txid),None)
     if selected is None:
         raise ValueError("selected transaction not in local run")
     report={
@@ -36,10 +36,11 @@ def case_export(run_dir: str | Path, txid: str, out_dir: str | Path) -> dict[str
 
 def case_pdf_from_json(json_path: str | Path, pdf_path: str | Path) -> dict[str,str]:
     """Create text-only PDF with no remote assets; render/visually audit before release."""
+    from xml.sax.saxutils import escape
+
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-    from xml.sax.saxutils import escape
+    from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
     source=Path(json_path)
     report=json.loads(source.read_text(encoding="utf-8"))

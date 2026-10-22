@@ -17,7 +17,11 @@ from pathlib import Path
 from typing import Any
 
 from clarion.v4.analysis import (
-    final_priority, local_priority, mcer_candidates, pattern_candidates, propagate,
+    final_priority,
+    local_priority,
+    mcer_candidates,
+    pattern_candidates,
+    propagate,
 )
 from clarion.v4.contracts import utc
 from clarion.v4.graph import build_snapshot, feature_rows, graph_export

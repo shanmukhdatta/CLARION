@@ -1,18 +1,18 @@
 """Focused v4 correctness contracts. Authored statically; NOT EXECUTED in this pass."""
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from pydantic import ValidationError
 
-from clarion.v4.analysis import final_priority, mcer_candidates, pattern_candidates, propagate
+from clarion.v4.analysis import final_priority, mcer_candidates, propagate
 from clarion.v4.contracts import Input, Output, Tx, WireObservation
 from clarion.v4.graph import build_snapshot, feature_rows
 from clarion.v4.ingest import btc_to_sats
 from clarion.v4.signals import VerifiedEconomicGoal, delta_signal, pi_signal
 
-NOW = datetime(2025, 1, 1, tzinfo=timezone.utc)
+NOW = datetime(2025, 1, 1, tzinfo=UTC)
 A, B, C = "a"*64, "b"*64, "c"*64
 
 
