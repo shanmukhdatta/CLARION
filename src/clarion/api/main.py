@@ -5,7 +5,8 @@ import json
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 
 HOME = """<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
 <title>CLARION | Local Investigator</title><style>
@@ -38,6 +39,11 @@ catch(e){$('status').textContent='Unable to load local artifacts: '+e.message}}$
 def create_app(run_dir: Path) -> FastAPI:
     app = FastAPI(title="CLARION local demo", docs_url=None, redoc_url=None)
     root = run_dir.resolve()
+    # Built React assets are optional; the original offline HTML demo remains
+    # as a no-Node fallback. Never serve arbitrary filesystem paths.
+    frontend_dist = Path(__file__).resolve().parents[3] / "frontend" / "dist"
+    if (frontend_dist / "index.html").is_file():
+        app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets"), check_dir=False), name="assets")
 
     def read(name: str):
         target = root / name
@@ -47,6 +53,12 @@ def create_app(run_dir: Path) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def home():
+        if (frontend_dist / "index.html").is_file():
+            return FileResponse(frontend_dist / "index.html", headers={
+                "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; object-src 'none'; frame-ancestors 'none'",
+                "X-Content-Type-Options": "nosniff",
+                "Cache-Control": "no-store",
+            })
         return HTMLResponse(HOME, headers={"Content-Security-Policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'"})
 
     @app.get("/api/manifest")
@@ -68,5 +80,17 @@ def create_app(run_dir: Path) -> FastAPI:
     @app.get("/api/propagation")
     def propagation():
         return read("propagation.json")
+
+    @app.get("/api/entities")
+    def get_entities(limit: int = Query(100, ge=1, le=1000), offset: int = Query(0, ge=0)):
+        return read("entities.json")[offset: offset + limit]
+
+    @app.get("/api/features")
+    def get_features(limit: int = Query(100, ge=1, le=1000), offset: int = Query(0, ge=0)):
+        return read("features.json")[offset: offset + limit]
+
+    @app.get("/api/health")
+    def health():
+        return {"status": "local", "read_only": True, "offline": True}
 
     return app
