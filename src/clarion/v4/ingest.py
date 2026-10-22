@@ -9,16 +9,15 @@ import csv
 import hashlib
 import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from collections.abc import Iterable
+from datetime import UTC, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from pydantic import ValidationError
 
-from clarion.v4.contracts import (
-    Input, Label, Output, Tx, WireObservation,
-)
+from clarion.v4.contracts import Input, Label, Output, Tx, WireObservation
 
 MAX_FILE_BYTES = 80_000_000
 MAX_ROWS = 250_000
@@ -106,7 +105,7 @@ def _parse_time(value: Any) -> datetime:
     parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
     if parsed.tzinfo is None or parsed.utcoffset() is None:
         raise ValueError("timezone offset required")
-    return parsed.astimezone(timezone.utc)
+    return parsed.astimezone(UTC)
 
 
 def _int(value: Any) -> int:
@@ -208,7 +207,7 @@ def import_bitcoin_core_tx(tx: dict[str, Any], *, source_id: str, available_at: 
     Bitcoin Core prevout is not assured; unresolved value and fee stay null.
     """
     raw_time = tx.get("blocktime", tx.get("time"))
-    when = (datetime.fromtimestamp(raw_time, tz=timezone.utc) if isinstance(raw_time, (int, float))
+    when = (datetime.fromtimestamp(raw_time, tz=UTC) if isinstance(raw_time, (int, float))
             else _parse_time(raw_time) if raw_time is not None else available_at)
     inputs = []
     coinbase = any("coinbase" in v for v in tx.get("vin", []))

@@ -94,7 +94,7 @@ def pattern_candidates(snapshot: Snapshot) -> list[dict[str, object]]:
             incoming[child].append(parent)
             outgoing[parent].append(child)
     patterns = []
-    for txid, tx in by_tx.items():
+    for txid in by_tx:
         amounts = outs.get(txid, [])
         if len(amounts) >= 5:
             repeats = len(amounts) - len(set(amounts))

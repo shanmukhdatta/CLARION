@@ -6,11 +6,20 @@ Timestamp UTC and source provenance are carried through each edge.
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime, timezone
-from typing import Iterable
+from collections.abc import Iterable
+from datetime import datetime
 
 from clarion.v4.contracts import (
-    Edge, Input, Mode, Output, Readiness, Snapshot, Tx, WireObservation, evidence_id, utc,
+    Edge,
+    Input,
+    Mode,
+    Output,
+    Readiness,
+    Snapshot,
+    Tx,
+    WireObservation,
+    evidence_id,
+    utc,
 )
 
 

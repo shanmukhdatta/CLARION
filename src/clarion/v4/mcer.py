@@ -6,14 +6,15 @@ H3 embedding closeness and H4 wire-context disagreement are soft hypotheses.
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from hashlib import sha256
 from itertools import combinations
 from math import sqrt
-from typing import Any, Iterable, Literal, Sequence
+from typing import Any, Literal
 
-from clarion.v4.contracts import Snapshot, utc, evidence_id
+from clarion.v4.contracts import Snapshot, utc
 
 
 @dataclass(frozen=True)
@@ -122,12 +123,12 @@ def h3_embedding_pairs(
         raise ValueError("large H3 proposals require approximate nearest neighbors")
     result=[]
     for left,right in combinations(keys,2):
-        l,r=vectors[left],vectors[right]
-        if len(l)!=len(r) or not l:
+        left_vec,right_vec=vectors[left],vectors[right]
+        if len(left_vec)!=len(right_vec) or not left_vec:
             continue
-        dot=sum(float(a)*float(b) for a,b in zip(l,r,strict=True))
-        ln=sqrt(sum(float(a)**2 for a in l))
-        rn=sqrt(sum(float(b)**2 for b in r))
+        dot=sum(float(a)*float(b) for a,b in zip(left_vec,right_vec,strict=True))
+        ln=sqrt(sum(float(a)**2 for a in left_vec))
+        rn=sqrt(sum(float(b)**2 for b in right_vec))
         similarity=dot/(ln*rn) if ln*rn else 0.0
         if similarity>=threshold:
             result.append(SignedEvidence(
@@ -202,7 +203,8 @@ def conservative_partition(
     # No automatic hard constraints generated from H4 by itself.
     parent:dict[str,str]={}
     for left,right in pairs:
-        parent.setdefault(left,left);parent.setdefault(right,right)
+        parent.setdefault(left,left)
+        parent.setdefault(right,right)
     def find(x:str)->str:
         while parent[x]!=x:
             x=parent[x]
@@ -212,7 +214,8 @@ def conservative_partition(
     unresolved=[]
     for (left,right),items in sorted(pairs.items()):
         if left in service_addresses or right in service_addresses:
-            unresolved.append((left,right));continue
+            unresolved.append((left,right))
+            continue
         # Independence is by source group, not repeated observations from one sensor.
         positives={e.independent_source:max(
             [v.weight for v in items if v.sign=="support" and v.independent_source==e.independent_source],
@@ -221,13 +224,15 @@ def conservative_partition(
         score=sum(positives.values())
         conflicted=sum(e.weight for e in items if e.sign=="conflict")
         if len(positives)<min_positive_sources or score-conflicted<min_weight:
-            unresolved.append((left,right));continue
+            unresolved.append((left,right))
+            continue
         a,b=find(left),find(right)
         if a==b:
             continue
         resulting=members(a)|members(b)
         if any(v.issubset(resulting) for v in hard_conflicts):
-            unresolved.append((left,right));continue
+            unresolved.append((left,right))
+            continue
         parent[b]=a
     groups:dict[str,list[str]]=defaultdict(list)
     for x in parent:

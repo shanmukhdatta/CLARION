@@ -5,7 +5,8 @@ No synthetic metric is presented as real-world evidence of illicit detection.
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any, Callable, Iterable, Sequence
+from collections.abc import Iterable, Sequence
+from typing import Any
 
 
 def audited_metrics(
@@ -16,8 +17,12 @@ def audited_metrics(
 ) -> dict[str, Any]:
     import numpy as np
     from sklearn.metrics import (
-        average_precision_score, confusion_matrix, f1_score,
-        precision_score, recall_score, roc_auc_score,
+        average_precision_score,
+        confusion_matrix,
+        f1_score,
+        precision_score,
+        recall_score,
+        roc_auc_score,
     )
     if len(truth) != len(scores) or len(truth) != len(group_ids) or not truth:
         raise ValueError("aligned nonempty label/score/group sequences required")

@@ -4,7 +4,7 @@ Only observed wire relations are allowed. No address->host owner relation exists
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import StrEnum
 from hashlib import sha256
 from typing import Literal
@@ -19,7 +19,7 @@ class Strict(BaseModel):
 def utc(ts: datetime) -> datetime:
     if ts.tzinfo is None or ts.utcoffset() is None:
         raise ValueError("UTC-offset-aware event_time/available_at required")
-    return ts.astimezone(timezone.utc)
+    return ts.astimezone(UTC)
 
 
 class EvidenceSource(Strict):
@@ -53,7 +53,7 @@ class Tx(Strict):
         return utc(value)
 
     @model_validator(mode="after")
-    def _availability(self) -> "Tx":
+    def _availability(self) -> Tx:
         if self.available_at < self.event_time:
             raise ValueError("available_at cannot precede event_time")
         return self
@@ -96,7 +96,7 @@ class WireObservation(Strict):
         return utc(value)
 
     @model_validator(mode="after")
-    def _match_provenance(self) -> "WireObservation":
+    def _match_provenance(self) -> WireObservation:
         if self.txid is not None and self.decode_provenance == "none":
             raise ValueError("TXID requires observed decode provenance")
         if self.available_at < self.event_time:
