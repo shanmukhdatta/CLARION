@@ -337,6 +337,10 @@ def main() -> int:
                 childdirs["/".join(pieces[:k-1])].add(pieces[k-1])
     changed = []
     for rel in sorted(dirs):
+        # This file is maintained through the authorized repository connector:
+        # the restricted GitHub Actions token cannot update workflow-directory paths.
+        if rel == ".github/workflows":
+            continue
         path = root / rel / "README.md"
         prior = path.read_text(encoding="utf-8") if path.is_file() else f"# `{rel}/` — CLARION folder guide\n"
         if START in prior:
