@@ -41,7 +41,7 @@ Review [complete project structure](../../../../docs/architecture/repository-str
 **Responsibility:** Plan the case dossiers component layer.  
 **Consumes:** Typed localhost API responses.  
 **Produces:** specialized React presentation for selected TXID and source provenance.  
-**Current direct-file inventory:** Blueprint stub: 2.
+**Current direct-file inventory:** Blueprint stub: 1, Executable source / config (validate): 1.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -49,7 +49,7 @@ Review [complete project structure](../../../../docs/architecture/repository-str
 | Entry | Technical responsibility | State |
 |---|---|---|
 | [`CaseDossier.tsx`](CaseDossier.tsx) | React component | Blueprint stub |
-| [`CasesPage.tsx`](CasesPage.tsx) | React component | Blueprint stub |
+| [`CasesPage.tsx`](CasesPage.tsx) | React component | Executable source / config (validate) |
 
 ### Child modules and navigation (cases)
 No tracked child folders.
