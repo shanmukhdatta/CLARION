@@ -33,3 +33,15 @@ node_modules/
 dist/
 build/
 coverage/
+
+# Never version persistent reviewer decisions, identity notes, or local case state
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.db
+*.db-wal
+*.db-shm
+data/generated/
+artifacts/v4_run/
+artifacts/json_model/
+artifacts/predictions.json
