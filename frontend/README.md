@@ -1,37 +1,35 @@
-# frontend/ — Architecture contract
+# CLARION Investigator Console — orange/white offline UI
 
-> **Documentation-only scaffold.** No module functionality is implemented. Follow the original v4 specification and root README; file stubs are comments describing future work.
+An **actual React 18 + Vite + TypeScript frontend** replacing the previous
+placeholder scaffold. Restrained terracotta (#C96743) / ivory (#FAF9F6) theme
+inspired by the requested minimalist orange-and-white palette; original CLARION
+layout, copy and controls.
 
-## Responsibility
-Offline investigator application workspace: React/TypeScript is planned; NO package.json until implementation.
+## Development
 
-## Phase ownership
-P4
+```bash
+cd frontend
+npm install
+npm run typecheck
+npm run dev
+```
 
-## Planned files and their exact responsibilities
+Run `clarion serve --run artifacts/demo_run --port 8000` separately. Vite
+proxies `/api` to this loopback service. Production bundle: `npm run build`
+then serve `frontend/dist` from the loopback API service (no CDN dependencies).
 
-| File | What must be written during implementation |
-|---|---|
-| **vite.config.ts** | Plan offline-only asset bundling, API proxy and CSP. |
-| **tsconfig.json** | Plan strict TS builds and path aliases. |
+## Live read-only routes
+- `GET /api/manifest`
+- `GET /api/leads?limit=1000`
+- `GET /api/graph`
+- `GET /api/motifs`
+- `GET /api/propagation`
 
-## Data/interfaces
-**Inputs:** See parent modules and the architecture specification.
+The UI derives overview, search, filters, inspector dossiers, graph neighborhoods,
+motif lists, Δ/Π abstention panels, and propagation summaries from real run files.
+It **never** fabricates missing entities, cross-layer eligibility, model metrics,
+or labels. Case JSON export includes source hash references and is explicitly a
+reviewable lead, not a claim of guilt.
 
-**Outputs:** Versioned artifacts or typed interfaces; no implementation exists yet.
-
-## Security, testing and acceptance
-Require executable tests, provenance and review before marking complete.
-
-For all modules: preserve provenance, causal availability, explicit uncertainty/abstention, offline operation, real tests and realistic false-positive controls. Record status in docs/progress before claiming completion.
-
-## Implementation handoff
-Do not add executable logic before the assigned phase PR; update this README when actual public interfaces, dependencies and tests are verified.
-
----
-
-## §11 target product screens (not yet implemented)
-
-Investigator workspace: readiness → ranked leads → selected entity/transaction → typed graph + time selector → stack/Δ/Π/motif breakdown → forward/backward MLRP exposure path → audit and export. Add per-run model/evaluation view. Every chart must expose its event-time cutoff and provenance.
-
-**UI stack:** React/TypeScript, Cytoscape.js or equivalent fully bundled local graph visualization, responsive keyboard-accessible layouts, no external CDN/fonts/telemetry. Frontend is driven only by versioned local FastAPI contracts with pagination/authorization. See [Dashboard design](../docs/architecture/investigator-dashboard-architecture.md).
+No analytics, telemetry, font CDN or outbound API; assets are locally bundled.
+This source has deliberately NOT been run or built in this authoring pass per request.

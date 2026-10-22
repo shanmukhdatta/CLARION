@@ -1,0 +1,13 @@
+# Extra dependencies for canonical v4 research pipeline. Pin/lock after local validation.
+# Basic package still installs through pyproject.toml (pydantic, PyYAML).
+numpy>=1.26,<3
+scipy>=1.12,<2
+scikit-learn>=1.5,<2
+pyarrow>=17,<25
+duckdb>=1.1,<3
+defusedxml>=0.7.1,<1
+fastapi>=0.115,<1
+uvicorn>=0.32,<1
+# Optional GNN challenger: manually choose a compatible torch+torch_geometric CPU/CUDA pair.
+# torch
+# torch-geometric

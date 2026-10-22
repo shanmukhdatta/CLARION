@@ -1,7 +1,18 @@
-# CLARION v4 — FILE BLUEPRINT ONLY. NOT FUNCTIONAL.
-# Intended path: .github/workflows/ci.yml
-# Purpose: TODO: Python lint, typing, tests, data contract tests and frontend checks with pinned actions.
-# Phase: P1/P5
-# Contracts: See parent modules and the architecture specification. -> Versioned artifacts or typed interfaces; no implementation exists yet.
-# Acceptance: Require executable tests, provenance and review before marking complete.
-# Implementation will be added in a dedicated phase PR with tests and security review.
+name: CLARION CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install project and demo requirements
+        run: python -m pip install -r requirements-demo.txt -e . pytest
+      - name: Run full offline test suite
+        run: python -m pytest -q
+      - name: Compile Python sources
+        run: python -m compileall -q src

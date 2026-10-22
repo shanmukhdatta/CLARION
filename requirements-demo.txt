@@ -1,0 +1,6 @@
+# Extra dependencies for the CLARION proof-of-concept.
+numpy>=1.26,<3
+scikit-learn>=1.4,<2
+fastapi>=0.112,<1
+uvicorn>=0.30,<1
+httpx>=0.27,<1

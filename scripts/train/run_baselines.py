@@ -1,7 +1,25 @@
-# CLARION v4 — FILE BLUEPRINT ONLY. NOT FUNCTIONAL.
-# Intended path: scripts/train/run_baselines.py
-# Purpose: TODO: command-line chronological base model evaluation.
-# Phase: P3
-# Contracts: See parent modules and the architecture specification. -> Versioned artifacts or typed interfaces; no implementation exists yet.
-# Acceptance: Require executable tests, provenance and review before marking complete.
-# Implementation will be added in a dedicated phase PR with tests and security review.
+"""Reproducible canonical experiment CLI, labels are training-only."""
+from __future__ import annotations
+
+import argparse
+import json
+
+from clarion.v4.pipeline import train_from_canonical
+
+
+def main() -> int:
+    p=argparse.ArgumentParser()
+    p.add_argument("--data",required=True)
+    p.add_argument("--out",default="artifacts/v4_training")
+    p.add_argument("--licence",required=True)
+    p.add_argument("--origin",required=True)
+    p.add_argument("--seed",type=int,default=26)
+    args=p.parse_args()
+    report=train_from_canonical(args.data,args.out,licence=args.licence,
+                                origin=args.origin,seed=args.seed)
+    print(json.dumps(report,indent=2,default=str))
+    return 0
+
+
+if __name__=="__main__":
+    raise SystemExit(main())

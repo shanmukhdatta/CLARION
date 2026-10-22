@@ -1,7 +1,24 @@
-# CLARION v4 — FILE BLUEPRINT ONLY. NOT FUNCTIONAL.
-# Intended path: scripts/data/generate_fixtures.py
-# Purpose: TODO: deterministic small SIH dataset and independent truth ledger.
-# Phase: P1
-# Contracts: See parent modules and the architecture specification. -> Versioned artifacts or typed interfaces; no implementation exists yet.
-# Acceptance: Require executable tests, provenance and review before marking complete.
-# Implementation will be added in a dedicated phase PR with tests and security review.
+"""Generate explicit fictional UTXO dataset, keep labels in a truth-only sidecar.
+
+Never feed the truth sidecar to an unsupervised evidence pipeline.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+
+from clarion.application.engine import generate
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", default="data/generated/demo")
+    parser.add_argument("--cases", type=int, default=32)
+    parser.add_argument("--seed", type=int, default=26)
+    args = parser.parse_args()
+    print(json.dumps(generate(args.out, args.cases, args.seed), indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
