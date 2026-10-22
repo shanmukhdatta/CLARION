@@ -17,6 +17,39 @@ jobs:
       - run: python -m pip install -e . -r requirements-v4.txt pytest ruff
       - run: python -m pytest -q tests/v4
       - run: python -m ruff check src/clarion/v4 scripts/v4_pipeline.py tests/v4
+  canonical-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e . -r requirements-v4.txt -r requirements-demo.txt pytest
+      - run: python -m clarion.cli.main generate-demo --out /tmp/clarion-input --cases 36 --seed 26
+      - run: |
+          python scripts/v4_pipeline.py analyze \
+            --data /tmp/clarion-input \
+            --out /tmp/clarion-v4 \
+            --licence SYNTHETIC_LOCAL \
+            --origin CLARION_GENERATOR
+      - name: Verify outputs are real evidence, not fabricated
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          folder = Path('/tmp/clarion-v4')
+          manifest = json.loads((folder/'run_manifest.json').read_text())
+          leads = json.loads((folder/'leads.json').read_text())
+          graph = json.loads((folder/'graph.json').read_text())
+          assert manifest['n_leads'] > 0
+          assert manifest['n_chain_edges'] == 108
+          assert len(leads) == 108
+          assert manifest['readiness']['analysis_mode'] == 'CHAIN_ONLY'
+          assert all(lead['delta']['status'] == 'ABSTAIN' for lead in leads)
+          assert all(lead['pi']['status'] == 'ABSTAIN' for lead in leads)
+          assert all(e['relation'] != 'wallet_owner' for e in graph['edges'])
+          print('Verified',len(leads),'leads and',manifest['n_chain_edges'],'UTXO spend edges.')
+          PY
   react-typescript:
     runs-on: ubuntu-latest
     defaults:
