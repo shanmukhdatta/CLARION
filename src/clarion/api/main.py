@@ -174,6 +174,11 @@ def create_app(run_dir: Path) -> FastAPI:
     ):
         graph = read("graph.json")
         root_id = "tx:" + txid
+        if (not isinstance(graph, dict) or not isinstance(graph.get("edges"), list)
+                or not isinstance(graph.get("nodes"), list)
+                or any(not isinstance(edge, dict) for edge in graph["edges"])
+                or any(not isinstance(node, dict) for node in graph["nodes"])):
+            raise HTTPException(422, "malformed graph evidence artifact")
         edges = [
             edge for edge in graph.get("edges", [])
             if edge.get("source") == root_id or edge.get("target") == root_id

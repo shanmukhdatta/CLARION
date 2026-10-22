@@ -51,9 +51,10 @@ def test_local_review_persists_and_rechecks_manifest(tmp_path, monkeypatch):
     assert client.get("/api/cases/audit").json()["valid"] is True
     assert len(client.get("/api/cases/" + TXID + "/history").json()) == 1
     assert client.get("/api/provenance/verify").json()["valid"] is True
+    assert client.get("/api/graph/neighborhood", params={"txid": TXID}).status_code == 200
     (tmp_path / "graph.json").write_text('{"nodes":[],"edges":[1]}', encoding="utf-8")
     assert client.get("/api/provenance/verify").json()["valid"] is False
-    assert client.get("/api/graph/neighborhood", params={"txid": TXID}).status_code == 200
+    assert client.get("/api/graph/neighborhood", params={"txid": TXID}).status_code == 422
     assert TestClient(create_app(tmp_path)).get("/api/cases/" + TXID).json()["review"]["revision"] == 1
 
 

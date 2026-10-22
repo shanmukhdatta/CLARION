@@ -44,7 +44,7 @@ def test_idempotency_and_concurrency(tmp_path):
     with pytest.raises(ReviewConflict, match="outdated"):
         update(db, "DISMISSED", rev=0, key="new-request-0002")
     with pytest.raises(ReviewConflict, match="not permitted"):
-        update(db, "ESCALATED", rev=0, key="new-request-0003")
+        update(db, "NEW", rev=1, key="new-request-0003")
 
 
 def test_audit_tamper_detection(tmp_path):
