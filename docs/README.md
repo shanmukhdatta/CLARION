@@ -45,15 +45,22 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Preserve decisions and observed implementation status.  
 **Consumes:** Original CLARION architecture and code contracts.  
 **Produces:** traceable system documentation.  
-**Current direct-file inventory:** Specification or guide: 2.
+**Current direct-file inventory:** Specification or guide: 9.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
 ### Files directly in this folder (docs)
 | Entry | Technical responsibility | State |
 |---|---|---|
+| [`API_SPECIFICATION.md`](API_SPECIFICATION.md) | CLARION localhost HTTP API — source contract | Specification or guide |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | CLARION — Current executable architecture (October 2026) | Specification or guide |
+| [`DATABASE_DESIGN.md`](DATABASE_DESIGN.md) | CLARION persistent case reviews — schema 1 | Specification or guide |
 | [`DOCUMENTATION_CONVENTIONS.md`](DOCUMENTATION_CONVENTIONS.md) | DOCUMENTATION_CONVENTIONS.md — planned content | Specification or guide |
+| [`FINAL_FEATURE_AUDIT.md`](FINAL_FEATURE_AUDIT.md) | CLARION — Final feature review for this implementation pass | Specification or guide |
 | [`FOLDER_README_INDEX.md`](FOLDER_README_INDEX.md) | CLARION — Every-folder technical README index | Specification or guide |
+| [`IMPLEMENTATION_CHECKLIST.md`](IMPLEMENTATION_CHECKLIST.md) | CLARION — Requirements-to-code implementation checklist | Specification or guide |
+| [`IMPLEMENTATION_DECISIONS.md`](IMPLEMENTATION_DECISIONS.md) | CLARION implementation decisions | Specification or guide |
+| [`LOCAL_TESTING.md`](LOCAL_TESTING.md) | CLARION local setup, testing, and synthetic research | Specification or guide |
 
 ### Child modules and navigation (docs)
 - [`adr/`](./adr/README.md) — Record approved architectural reasoning.

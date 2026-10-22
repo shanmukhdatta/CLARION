@@ -19,14 +19,17 @@ from typing import Any
 from clarion.v4.analysis import (
     final_priority,
     local_priority,
-    mcer_candidates,
     pattern_candidates,
     propagate,
 )
 from clarion.v4.contracts import utc
 from clarion.v4.graph import build_snapshot, feature_rows, graph_export
 from clarion.v4.ingest import import_canonical
+from clarion.v4.mcer import conservative_partition, h1_common_inputs, h2_change_hypotheses
 from clarion.v4.ml import fit_temporal_stack, novelty_ranking
+from clarion.v4.monitoring import source_quality_report
+from clarion.v4.motifs_extended import additional_motifs
+from clarion.v4.wire_sessions import build_sessions, wire_feature_rows
 
 
 def save_json(path: Path, data: Any) -> None:
@@ -79,8 +82,22 @@ def run(
         max_clock_uncertainty_ms=max_clock_uncertainty_ms,
     )
     features = feature_rows(snapshot)
-    patterns = pattern_candidates(snapshot)
-    entities = mcer_candidates(snapshot)
+    patterns = pattern_candidates(snapshot) + additional_motifs(snapshot)
+    # MCER H1/H2 evidence is captured, but candidates merge only with
+    # independently sourced positive witnesses and no hard service conflicts.
+    signed_evidence = h1_common_inputs(snapshot) + h2_change_hypotheses(snapshot)
+    partition = conservative_partition(signed_evidence, cutoff=snapshot.cutoff)
+    entities = [
+        {"entity_id": "entity:" + partition.version_id.removeprefix("mcer:") + f":{index}",
+         "members": list(group), "status": "TENTATIVE_INDEPENDENT_EVIDENCE",
+         "support": [
+             entry.evidence_ref for entry in signed_evidence
+             if entry.left in group and entry.right in group and entry.sign == "support"
+         ], "version_id": partition.version_id}
+        for index, group in enumerate(partition.candidates)
+    ]
+    sessions = build_sessions(snapshot.wire, cutoff=snapshot.cutoff)
+    wire_features = wire_feature_rows(snapshot.wire, cutoff=snapshot.cutoff)
     pattern_count: Counter[str] = Counter(str(p["subject_id"]) for p in patterns)
     if len(features) >= 10:
         novelty = {str(row["subject_id"]): float(row["novelty_rank"])
@@ -131,9 +148,17 @@ def run(
     folder.mkdir(parents=True, exist_ok=True)
     save_json(folder / "graph.json", graph)
     save_json(folder / "motifs.json", patterns)
-    save_json(folder / "entities.json", [asdict(x) for x in entities])
+    save_json(folder / "entities.json", entities)
+    save_json(folder / "mcer_evidence.json", [asdict(x) for x in signed_evidence])
+    save_json(folder / "mcer_partition.json", {
+        "version_id": partition.version_id, "cutoff": partition.cutoff,
+        "candidates": partition.candidates, "unresolved_pairs": partition.unresolved_pairs,
+        "status": "TENTATIVE_NEVER_WALLET_IDENTITY",
+    })
     save_json(folder / "leads.json", leads)
     save_json(folder / "features.json", features)
+    save_json(folder / "wire_sessions.json", [session.as_dict() for session in sessions])
+    save_json(folder / "wire_features.json", wire_features)
     save_json(folder / "quarantine.json", source.quarantine)
     save_json(folder / "propagation.json", {
         "max_hops": propagated["max_hops"], "capacity_points": 25,
@@ -164,6 +189,9 @@ def run(
         "n_chain_edges": sum(e.relation == "spends_outpoint" for e in snapshot.edges),
         "n_wire_observations": len(snapshot.wire),
         "n_entities": len(entities), "n_quarantined_rows": len(source.quarantine),
+        "n_wire_sessions": len(sessions), "n_wire_feature_rows": len(wire_features),
+        "n_mcer_signed_evidence": len(signed_evidence),
+        "n_mcer_tentative_entities": len(entities),
         "training_score_type": "UNSUPERVISED_RANK_NOT_PROBABILITY",
         "unvalidated_real_world_performance": True,
         "research_limitations": [
@@ -173,11 +201,14 @@ def run(
             "Synthetic performance cannot establish deployment accuracy",
         ],
     }
+    save_json(folder / "monitoring.json", source_quality_report(manifest))
     save_json(folder / "run_manifest.json", manifest)
     manifest["audit_sha256"] = {
         name: hashlib.sha256((folder / name).read_bytes()).hexdigest()
         for name in ("graph.json", "motifs.json", "entities.json", "leads.json",
-                     "features.json", "propagation.json", "quarantine.json")
+                     "features.json", "wire_sessions.json", "wire_features.json",
+                     "propagation.json", "quarantine.json",
+                     "mcer_evidence.json", "mcer_partition.json", "monitoring.json")
     }
     save_json(folder / "run_manifest.json", manifest)
     return manifest

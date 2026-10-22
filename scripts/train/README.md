@@ -46,15 +46,17 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Train supervised OOF baselines and optional research challengers.  
 **Consumes:** Time-valid labeled data and snapshots.  
 **Produces:** unvalidated experiment scores.  
-**Current direct-file inventory:** Executable source / config (validate): 2.
+**Current direct-file inventory:** Executable source / config (validate): 4.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
 ### Files directly in this folder (train)
 | Entry | Technical responsibility | State |
 |---|---|---|
+| [`predict_json_baseline.py`](predict_json_baseline.py) | Infer uncalibrated *research* scores from a verified local JSON model. | Executable source / config (validate) |
 | [`run_baselines.py`](run_baselines.py) | Reproducible canonical experiment CLI, labels are training-only. | Executable source / config (validate) |
 | [`run_gnn.py`](run_gnn.py) | Optional *research* GraphSAGE/GAT snapshot challenger (no pretrained weights). Using this file never clai | Executable source / config (validate) |
+| [`train_json_baseline.py`](train_json_baseline.py) | Fit and export a safe JSON logistic experiment from locally labeled canonical data. | Executable source / config (validate) |
 
 ### Child modules and navigation (train)
 No tracked child folders.

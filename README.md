@@ -13,6 +13,22 @@
 
 ---
 
+## Current code and requirements review — October 22, 2026
+
+**Implementation exists, but the original 13-block v4 architecture is not yet complete.** The old 2026 scaffold-only status above is historical and should not be interpreted as the current codebase. The canonical synthetic pipeline, offline React interface, and Python regression tests run; some advanced statistical claims and module blueprints remain incomplete.
+
+- [Current executable architecture](docs/ARCHITECTURE.md)
+- [172-item implementation checklist](docs/IMPLEMENTATION_CHECKLIST.md)
+- [Independent feature completeness audit](docs/FINAL_FEATURE_AUDIT.md)
+- [Technical decisions](docs/IMPLEMENTATION_DECISIONS.md)
+- [API specification](docs/API_SPECIFICATION.md) and [SQLite case database](docs/DATABASE_DESIGN.md)
+- [Local setup and verification](docs/LOCAL_TESTING.md)
+- [All folder-by-folder technical guides](docs/FOLDER_README_INDEX.md)
+
+No synthetic or uncalibrated review score is a declaration of wrongdoing. No observed relay IP is automatically a wallet owner.
+
+---
+
 ## 1. Product vision
 
 CLARION ingests authorized local Bitcoin chain and P2P observations (CSV, JSON and XML), validates evidence, reconstructs temporal value flow, learns graph and tabular behavior, proposes explainable entity clusters, detects pattern candidates, scores discrepancies, and produces ranked investigator leads with verifiable context. The SIH task calls for a **working offline AI/ML prototype**, not only rules or a diagram; implementation follows the phase roadmap after review.

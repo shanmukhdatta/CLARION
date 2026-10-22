@@ -72,6 +72,28 @@ export interface EntityCandidate {
   support?: string[];
   status?: string;
 }
+export type ReviewStatus = "NEW" | "IN_REVIEW" | "DISMISSED" | "ESCALATED";
+export interface ReviewRecord {
+  txid: string;
+  run_sha256: string;
+  status: ReviewStatus;
+  note: string;
+  reviewer: string;
+  revision: number;
+  updated_at: string | null;
+}
+export interface CaseRecord { lead: Lead; review: ReviewRecord }
+export interface CaseHistory {
+  seq: number;
+  request_id: string;
+  previous_status: ReviewStatus;
+  next_status: ReviewStatus;
+  note: string;
+  reviewer: string;
+  timestamp: string;
+  revision: number;
+  event_hash: string;
+}
 export interface WorkspaceData {
   entities: EntityCandidate[];
   manifest: RunManifest;

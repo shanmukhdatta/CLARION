@@ -89,6 +89,8 @@ class WireObservation(Strict):
     source_id: str
     asn: int | None = Field(default=None, ge=0)
     country: str | None = None
+    source_port: int | None = Field(default=None, ge=0, le=65535)
+    destination_port: int | None = Field(default=None, ge=0, le=65535)
 
     @field_validator("event_time", "available_at")
     @classmethod
