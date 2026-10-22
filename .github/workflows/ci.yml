@@ -16,3 +16,5 @@ jobs:
         run: python -m pytest -q
       - name: Compile Python sources
         run: python -m compileall -q src
+      - name: Validate per-folder technical READMEs and index
+        run: python scripts/docs/generate_folder_readmes.py --check

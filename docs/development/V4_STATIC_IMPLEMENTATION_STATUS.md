@@ -1,5 +1,8 @@
 # CLARION v4 static implementation audit — 22 October 2026
 
+> **Update — 22 October 2026 (post-merge):** This page records the **initial static authoring pass**, when tests had not yet been executed. Subsequently GitHub CI successfully ran the Python v4 contracts, Ruff, React TypeScript/Vite build and fictional canonical smoke checks before PR #8 was merged into `main`. The system nevertheless remains **scientifically incomplete**. For the current per-feature audit, refer to [Feature Implementation Audit](../architecture/FEATURE_IMPLEMENTATION_AUDIT.md), not this historical execution-status paragraph.
+
+
 **READ THIS BEFORE CLAIMING COMPLETION.** Code was authored and committed *without
 running tests, training, the UI build, or integration smoke tests in this pass*,
 per request. A file existing is not proof it runs. No actual SIH production
