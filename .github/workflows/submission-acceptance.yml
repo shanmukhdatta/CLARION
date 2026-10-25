@@ -26,6 +26,16 @@ jobs:
       - run: python scripts/submission_demo.py run --out /tmp/clarion-submission --cases 10 --seed 26
       - run: python scripts/release/check_submission.py --run /tmp/clarion-submission/investigation
       - run: python scripts/train/record_mlflow.py --run /tmp/clarion-submission/investigation --out /tmp/clarion-submission/mlops
+      - name: Print exact generated README updates for maintainer sync
+        run: |
+          python scripts/docs/generate_folder_readmes.py --write
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for f in ("docs/README.md", "scripts/README.md", "scripts/release/README.md",
+                    "scripts/train/README.md", "src/clarion/v4/README.md", "tests/v4/README.md"):
+              print("CLARION_DOCSYNC_JSON=" + json.dumps({"path": f, "content": Path(f).read_text(encoding="utf-8")}))
+          PY
       - name: Check documentation UI includes explicit synthetic safeguards
         run: |
           python - <<'PY'

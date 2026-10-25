@@ -92,7 +92,7 @@ def train_graphsage(
     x, e = _tensors(torch, info, train_edges)
     model = _make_model(torch, SAGEConv)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-    rng = random.Random(seed)
+    rng = random.Random(seed)  # noqa: S311 - deterministic research sampling, not cryptography
     observed = set(edges)
     possible = [(a, b) for a in range(len(info["nodes"]))
                 for b in range(len(info["nodes"])) if a != b and (a, b) not in observed]

@@ -7,7 +7,6 @@ from __future__ import annotations
 import json
 import math
 from pathlib import Path
-from typing import Any
 
 
 def summarize_run(run_dir: str | Path) -> dict[str, float]:
