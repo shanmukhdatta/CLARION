@@ -1,0 +1,23 @@
+# Localhost-only fictional demo. Never place on a public interface.
+services:
+  clarion-demo:
+    build: .
+    image: clarion-synthetic:local
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      CLARION_RUN_DIR: /workspace/artifacts/submission_demo/investigation
+    tmpfs:
+      - /tmp
+    volumes:
+      - clarion-demo-artifacts:/workspace/artifacts
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 20s
+      timeout: 5s
+      retries: 4
+volumes:
+  clarion-demo-artifacts:

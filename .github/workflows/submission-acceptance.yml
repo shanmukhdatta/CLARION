@@ -10,6 +10,9 @@ on:
       - 'docs/index.html'
       - 'docs/showcase.css'
       - 'docs/showcase.js'
+      - 'Dockerfile'
+      - 'compose.yaml'
+      - 'src/clarion/api/**'
       - '.github/workflows/submission-acceptance.yml'
   workflow_dispatch:
 jobs:
