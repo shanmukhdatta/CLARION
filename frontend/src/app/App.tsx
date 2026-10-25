@@ -153,12 +153,12 @@ function MiniGraph({ graph, focus, onSelect }: {
     <div>
       <svg className="graph-svg" viewBox="0 0 790 350" aria-label="Verified UTXO graph preview" role="img">
         <defs><marker id="arrowhead" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <path d="M0,0 L7,3.5 L0,7" fill="#C4BCB3"/></marker></defs>
+          <path d="M0,0 L7,3.5 L0,7" fill="#9EB9DE"/></marker></defs>
         {shown.edges.map((e,index)=>{
           const a=coord.get(e.source), b=coord.get(e.target);
           if (!a || !b) return null;
           return <line key={index} x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-            stroke="#C4BCB3" strokeWidth="1.7" markerEnd="url(#arrowhead)"/>;
+            stroke="#9EB9DE" strokeWidth="1.7" markerEnd="url(#arrowhead)"/>;
         })}
         {shown.ids.map((id,index)=>{
           const c=coord.get(id)!;
@@ -166,10 +166,10 @@ function MiniGraph({ graph, focus, onSelect }: {
           return <g key={id} onClick={()=>onSelect(id.replace(/^tx:/,""))}
             style={{cursor:"pointer"}} tabIndex={0} role="button" aria-label={`Inspect ${id}`}>
             <circle cx={c.x} cy={c.y} r={highlight?17:12}
-              fill={highlight?"#C96743":index%3===0?"#EBC4B4":"#F7E9DF"}
-              stroke={highlight?"#A84E30":"#DA8C6D"} strokeWidth="1.5"/>
+              fill={highlight?"#2563EB":index%3===0?"#C6DBFE":"#EAF2FF"}
+              stroke={highlight?"#1D4ED8":"#89B5F4"} strokeWidth="1.5"/>
             <text x={c.x} y={c.y+31} textAnchor="middle"
-              fontSize="9" fontFamily="monospace" fill="#867B74">{id.slice(0,7)}</text>
+              fontSize="9" fontFamily="monospace" fill="#6C87AA">{id.slice(0,7)}</text>
           </g>;
         })}
       </svg>

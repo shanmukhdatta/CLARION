@@ -1,0 +1,38 @@
+name: CLARION submission acceptance
+on:
+  pull_request:
+    paths:
+      - 'src/clarion/v4/**'
+      - 'scripts/submission_demo.py'
+      - 'scripts/train/**'
+      - 'scripts/release/**'
+      - 'tests/v4/**'
+      - 'docs/index.html'
+      - 'docs/showcase.css'
+      - 'docs/showcase.js'
+      - '.github/workflows/submission-acceptance.yml'
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . -r requirements-v4.txt -r requirements-demo.txt pytest ruff
+      - run: python -m pytest -q tests/v4
+      - run: python -m ruff check src/clarion/v4 scripts/submission_demo.py scripts/train/run_submission_gnn.py scripts/train/record_mlflow.py scripts/release/check_submission.py tests/v4
+      - run: python scripts/submission_demo.py run --out /tmp/clarion-submission --cases 10 --seed 26
+      - run: python scripts/release/check_submission.py --run /tmp/clarion-submission/investigation
+      - run: python scripts/train/record_mlflow.py --run /tmp/clarion-submission/investigation --out /tmp/clarion-submission/mlops
+      - name: Check documentation UI includes explicit synthetic safeguards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path('docs/index.html').read_text()
+          assert 'DEMO DATA ONLY' in html
+          assert 'MODEL_NOT_CONNECTED' in Path('docs/showcase.js').read_text()
+          assert 'No owner inference.' in html
+          print('Static showcase safety/status labels verified')
+          PY

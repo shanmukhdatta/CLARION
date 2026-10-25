@@ -2,10 +2,10 @@
 > **CLARION — Offline, Explainable Bitcoin Transaction and Network-Traffic Intelligence.** An evidence-first investigator platform for SIH26146; uses graph ML and classical learning to prioritize reviewable leads **without claiming that a relay IP owns a wallet**.
 
 **Project:** Smart India Hackathon 2026 · SIH26146 · NTRO · Blockchain & Cybersecurity  
-**Target:** Linux, fully offline at inference time · **Repository status: architecture and documentation scaffold ONLY**  
-**Current stage:** Architecture gap audit and cross-component contract review. **No executable application, trained model, security test or completed benchmark is represented as working. Critical dataset and calibration decisions remain open.**
+**Target:** Linux, offline inference · **Repository status: functional synthetic demo with incomplete research and deployment validation**  
+**Current stage (October 25, 2026):** Executable synthetic research demo, local FastAPI/React investigation workspace, tested canonical pipeline and experimental models are present. **The full v4 research architecture is NOT yet scientifically validated or release-certified.** Real P2P/sensor joins, Δ/Π economic premises and calibrated real-world classifications remain unverified. This paragraph supersedes the historical scaffold status below.
 
-### Start implementing CLARION — follow this first
+### Submission demonstration and blue/white investigator UI (October 25, 2026)\n\nStart with [submission integration and 20-stage checklist](docs/submission-architecture.md), [static GitHub Pages showcase](docs/index.html), and [actual local setup](docs/LOCAL_TESTING.md). The showcase does not perform ML inference; use the local application for real interactions. Models show explicit not-configured states until trained and verified.\n\n### Start implementing CLARION — follow this first
 
 **[Beginner-friendly phase-by-phase implementation playbook](docs/development/implementation-playbook.md)** — the practical starting point for a new contributor. It explains the recommended **technology stack and libraries**, where to obtain **real Bitcoin datasets**, how to **generate synthetic CSV/JSON/XML when official data is missing**, how to structure and train baseline/GNN/stacked models without data leakage, what each existing repository module should implement, what deliverables to produce, and the **P0–P5 acceptance gates**. It also lists planned CLI interfaces clearly marked **not yet implemented**.
 
