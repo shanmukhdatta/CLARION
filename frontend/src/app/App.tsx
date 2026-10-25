@@ -8,7 +8,7 @@ import {
   ShieldQuestion, SlidersHorizontal, Sparkles, Waypoints, X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { exportCaseAsJson, loadWorkspace } from "../lib/api";
+import { exportCaseAsJson, getModelReadiness, getSyntheticTrainingExperiment, loadWorkspace } from "../lib/api";
 import CasesPage from "../features/cases/CasesPage";
 import type { GraphData, GraphEdge, Lead, Motif, Priority, WorkspaceData } from "../lib/types";
 
@@ -153,12 +153,12 @@ function MiniGraph({ graph, focus, onSelect }: {
     <div>
       <svg className="graph-svg" viewBox="0 0 790 350" aria-label="Verified UTXO graph preview" role="img">
         <defs><marker id="arrowhead" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <path d="M0,0 L7,3.5 L0,7" fill="#C4BCB3"/></marker></defs>
+          <path d="M0,0 L7,3.5 L0,7" fill="#9EB9DE"/></marker></defs>
         {shown.edges.map((e,index)=>{
           const a=coord.get(e.source), b=coord.get(e.target);
           if (!a || !b) return null;
           return <line key={index} x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-            stroke="#C4BCB3" strokeWidth="1.7" markerEnd="url(#arrowhead)"/>;
+            stroke="#9EB9DE" strokeWidth="1.7" markerEnd="url(#arrowhead)"/>;
         })}
         {shown.ids.map((id,index)=>{
           const c=coord.get(id)!;
@@ -166,10 +166,10 @@ function MiniGraph({ graph, focus, onSelect }: {
           return <g key={id} onClick={()=>onSelect(id.replace(/^tx:/,""))}
             style={{cursor:"pointer"}} tabIndex={0} role="button" aria-label={`Inspect ${id}`}>
             <circle cx={c.x} cy={c.y} r={highlight?17:12}
-              fill={highlight?"#C96743":index%3===0?"#EBC4B4":"#F7E9DF"}
-              stroke={highlight?"#A84E30":"#DA8C6D"} strokeWidth="1.5"/>
+              fill={highlight?"#2563EB":index%3===0?"#C6DBFE":"#EAF2FF"}
+              stroke={highlight?"#1D4ED8":"#89B5F4"} strokeWidth="1.5"/>
             <text x={c.x} y={c.y+31} textAnchor="middle"
-              fontSize="9" fontFamily="monospace" fill="#867B74">{id.slice(0,7)}</text>
+              fontSize="9" fontFamily="monospace" fill="#6C87AA">{id.slice(0,7)}</text>
           </g>;
         })}
       </svg>
@@ -410,6 +410,52 @@ function PropagationPage({data}:{data:WorkspaceData}){
   </>;
 }
 
+function SyntheticTrainingStatus() {
+  const [report,setReport]=useState<{training_status:string;model_families:string[];meta_model:string;metrics_synthetic_only:Record<string,number>;important:string}|null>(null);
+  useEffect(()=>{getSyntheticTrainingExperiment().then(setReport);},[]);
+  return <section className="card" style={{marginTop:18}}>
+    <div className="card-heading"><h2>Synthetic training experiment</h2>
+      <Tag kind="warn">{report?.training_status ?? "NO TRAINING REPORT"}</Tag></div>
+    {!report ? <p style={{fontSize:12,color:"var(--muted)"}}>Run the local full-demo training pipeline to generate actual measured synthetic metrics. This page does not invent results.</p> :
+      <>
+        <Info name="Trained families" value={report.model_families.join(" · ")}/>
+        <Info name="OOF stack" value={report.meta_model}/>
+        {Object.entries(report.metrics_synthetic_only).map(([metric,value])=>
+          <Info key={metric} name={readable(metric)} value={String(value)}/>)}
+        <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.7}}>{report.important}</p>
+      </>}
+  </section>;
+}
+
+function ModelConnectionStatus() {
+  const [model,setModel]=useState<{status:string;detail:string}|null>(null);
+  const [error,setError]=useState<string|null>(null);
+  const [loading,setLoading]=useState(false);
+  const check=()=>{
+    setLoading(true);
+    setError(null);
+    getModelReadiness()
+      .then(setModel)
+      .catch((reason:unknown)=>setError(reason instanceof Error?reason.message:String(reason)))
+      .finally(()=>setLoading(false));
+  };
+  useEffect(()=>{check();},[]);
+  return <div style={{marginTop:21,paddingTop:18,borderTop:"1px solid var(--border)"}}>
+    <div className="card-heading"><h2>Local model connection</h2>
+      <button type="button" className="secondary-btn" onClick={check} disabled={loading}>
+        <RefreshCw size={14}/> {loading?"Checking…":"Check connection"}
+      </button>
+    </div>
+    <Info name="Model status" value={error?"CONNECTION_UNAVAILABLE":model?.status??"NOT_CHECKED"}/>
+    <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.7}}>
+      {error??model?.detail??"Checking the local API. No unverified model is used in the lead ranking."}
+    </p>
+    <p style={{fontSize:11,color:"var(--muted)"}}>
+      A connected artifact remains experimental and never silently replaces current case scores.
+    </p>
+  </div>;
+}
+
 function StatusPage({data,kind,onSelect}:{data:WorkspaceData;kind:Page;onSelect:(lead:Lead)=>void}){
   const {manifest}=data;
   if(kind==="entities") return <>
@@ -437,7 +483,9 @@ function StatusPage({data,kind,onSelect}:{data:WorkspaceData;kind:Page;onSelect:
       <Info name="Real-world validation" value="Not established"/>
       <Info name="External benchmark" value="Not supplied"/>
       <Info name="Predictor warning" value="Scores ≠ illicit probability"/>
+      <ModelConnectionStatus/>
     </div>
+    <SyntheticTrainingStatus/>
   </>;
   if(kind==="audit") return <>
     <PageHeader eyebrow="Evidence integrity" title="Provenance audit"

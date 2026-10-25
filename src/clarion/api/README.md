@@ -71,7 +71,7 @@ flowchart TB
 **Responsibility:** Read-only FastAPI for bundled React and case examination.  
 **Consumes:** Local immutable run outputs.  
 **Produces:** bounded /api JSON and loopback HTML.  
-**Current direct-file inventory:** Blueprint stub: 3, Executable source / config (validate): 2.
+**Current direct-file inventory:** Blueprint stub: 3, Executable source / config (validate): 3.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -80,6 +80,7 @@ flowchart TB
 |---|---|---|
 | [`__init__.py`](__init__.py) | Python module | Blueprint stub |
 | [`dependencies.py`](dependencies.py) | Python module | Blueprint stub |
+| [`deployment.py`](deployment.py) | Explicit container-only application entrypoint. Use in a container whose exposed port is restricted to ho | Executable source / config (validate) |
 | [`main.py`](main.py) | Read-only offline investigation dashboard. Only bind to loopback. | Executable source / config (validate) |
 | [`reviews.py`](reviews.py) | Local case-management routes mounted under the immutable run-file API. Write operations require an explic | Executable source / config (validate) |
 | [`schemas.py`](schemas.py) | Python module | Blueprint stub |

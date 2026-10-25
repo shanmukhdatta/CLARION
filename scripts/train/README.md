@@ -46,7 +46,7 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Train supervised OOF baselines and optional research challengers.  
 **Consumes:** Time-valid labeled data and snapshots.  
 **Produces:** unvalidated experiment scores.  
-**Current direct-file inventory:** Executable source / config (validate): 4.
+**Current direct-file inventory:** Executable source / config (validate): 6.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -54,8 +54,10 @@ Do not add executable logic before the assigned phase PR; update this README whe
 | Entry | Technical responsibility | State |
 |---|---|---|
 | [`predict_json_baseline.py`](predict_json_baseline.py) | Infer uncalibrated *research* scores from a verified local JSON model. | Executable source / config (validate) |
+| [`record_mlflow.py`](record_mlflow.py) | Optional offline MLflow integration; all experiment results are explicitly synthetic. | Executable source / config (validate) |
 | [`run_baselines.py`](run_baselines.py) | Reproducible canonical experiment CLI, labels are training-only. | Executable source / config (validate) |
 | [`run_gnn.py`](run_gnn.py) | Optional *research* GraphSAGE/GAT snapshot challenger (no pretrained weights). Using this file never clai | Executable source / config (validate) |
+| [`run_submission_gnn.py`](run_submission_gnn.py) | Optional GraphSAGE trainer/inference. Requires compatible torch and PyG installation. | Executable source / config (validate) |
 | [`train_json_baseline.py`](train_json_baseline.py) | Fit and export a safe JSON logistic experiment from locally labeled canonical data. | Executable source / config (validate) |
 
 ### Child modules and navigation (train)

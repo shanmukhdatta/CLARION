@@ -2,12 +2,12 @@
 
 Use a Python 3.11–3.12 virtual environment on Linux or WSL. The review UI is a local single-user experiment. This project does **not** contain genuine P2P capture or permissioned labeled investigation data.
 
-## Get code and install
+## Get code and install\n\nFor the October 25 submission path and explicit research limitations, see [submission integration](submission-architecture.md).
 
 ```bash
 git clone https://github.com/shanmukhdatta/CLARION.git
 cd CLARION
-git switch implementation/full-requirements-integration-20261022
+git switch main  # the completed implementation PR is already merged
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e . -r requirements-v4.txt -r requirements-demo.txt pytest ruff

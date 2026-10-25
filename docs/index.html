@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#174A9A">
+  <meta name="description" content="CLARION — offline, evidence-first Bitcoin transaction intelligence. Interactive static showcase with honest model readiness states.">
+  <title>CLARION · Evidence Intelligence Showcase</title>
+  <link rel="stylesheet" href="./showcase.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <div class="brand"><span class="brandmark">C</span><div>CLARION<small>SIH 2026 · BITCOIN INTELLIGENCE</small></div></div>
+      <div class="side-caption">RESEARCH WORKSPACE</div>
+      <nav class="nav">
+        <button class="navlink active" data-view="overview">◫ <span>Overview</span></button>
+        <button class="navlink" data-view="evidence">◇ <span>Evidence graph</span></button>
+        <button class="navlink" data-view="pipeline">▤ <span>Analysis pipeline</span></button>
+        <button class="navlink" data-view="models">◈ <span>Models & MLOps</span></button>
+        <button class="navlink" data-view="cases">▣ <span>Case review</span></button>
+        <button class="navlink" data-view="deployment">⌘ <span>Deployment</span></button>
+      </nav>
+      <div class="side-bottom">
+        <div class="online-dot"></div>
+        <div><strong>Static showcase</strong><small>No live source or models attached</small></div>
+      </div>
+    </aside>
+    <main class="main" id="main">
+      <header class="topbar">
+        <div class="crumb">Research / <strong id="breadcrumb">Overview</strong></div>
+        <div class="top-right"><span class="chip">DEMO DATA ONLY</span><a class="github" href="https://github.com/shanmukhdatta/CLARION" target="_blank" rel="noopener">View source ↗</a></div>
+      </header>
+      <div class="page">
+        <section id="view-overview" class="view active">
+          <div class="eyebrow">OFFLINE BITCOIN EVIDENCE INTELLIGENCE</div>
+          <h1>Investigate the flow. <span>Verify the evidence.</span></h1>
+          <p class="lead">CLARION traces Bitcoin UTXO movements and permitted P2P relay observations to produce transparent review priorities—not claims of guilt or wallet-to-IP ownership.</p>
+          <div class="alert" role="note"><strong>Preview environment</strong> This GitHub Pages site is a static, illustrative showcase. To process transactions, run the local CLARION Python pipeline and FastAPI/React investigator application. No dataset is transmitted by this page.</div>
+          <div class="metrics">
+            <div class="metric"><small>Execution</small><strong>Local-only</strong><span>Offline inference design</span></div>
+            <div class="metric"><small>Evidence nodes</small><strong>6 types</strong><span>Transaction, address, entity, host, ASN, country</span></div>
+            <div class="metric"><small>Risk propagation</small><strong>≤ 6 hops</strong><span>≤ 25 points on final review score</span></div>
+            <div class="metric"><small>Verified models</small><strong>Not linked</strong><span>Research models require eligible training data</span></div>
+          </div>
+          <div class="twocol">
+            <article class="panel"><div class="panel-heading"><h2>Evidence-to-decision architecture</h2><span class="subdued">Planned + implemented subsystems</span></div>
+              <div class="stages">
+                <div><b>01</b><strong>Ingest & validate</strong><span>CSV · JSON · XML · outpoints</span></div>
+                <div><b>02</b><strong>Construct evidence graph</strong><span>Value-flow and relay-context channels</span></div>
+                <div><b>03</b><strong>Candidate intelligence</strong><span>MCER · motifs · optional models</span></div>
+                <div><b>04</b><strong>Bounded priority scoring</strong><span>Frozen seed → causal propagation</span></div>
+                <div><b>05</b><strong>Review & export</strong><span>Evidence paths, uncertainty, case audit</span></div>
+              </div>
+            </article>
+            <article class="panel"><div class="panel-heading"><h2>Research gates</h2><span class="subdued">Never silently filled</span></div>
+              <div class="gate"><span class="gate-icon">✓</span><div><strong>Chain-only fallback</strong><p>Valid even without P2P observations.</p></div></div>
+              <div class="gate"><span class="gate-icon">✓</span><div><strong>Novelty is not a probability</strong><p>Uncalibrated rankings carry clear labels.</p></div></div>
+              <div class="gate"><span class="gate-icon warn">!</span><div><strong>Δ signal — ABSTAIN</strong><p>Requires independently validated chain–wire dependence.</p></div></div>
+              <div class="gate"><span class="gate-icon warn">!</span><div><strong>Π signal — ABSTAIN</strong><p>Requires a verified economic goal and baseline.</p></div></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="view-evidence" class="view">
+          <div class="eyebrow">CROSS-LAYER EVIDENCE</div><h1>Evidence graph explorer</h1><p class="lead">Illustrative topology only. Use the local API for real, bounded graph snapshots with provenance.</p>
+          <article class="panel"><div class="panel-heading"><h2>Value flow vs observational context</h2><span class="chip">Illustration — not real transactions</span></div>
+          <svg class="graph" role="img" aria-label="Illustrative Bitcoin transactions, address candidates, peer host, ASN and country; no owner edge" viewBox="0 0 850 370">
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7EA6D8"/></marker></defs>
+            <path d="M158 138 L340 138 L520 138" class="chain-path"/><path d="M595 245 L545 160" class="wire-path"/><path d="M685 244 L750 244" class="context-path"/>
+            <g class="node tx" tabindex="0"><circle cx="115" cy="138" r="46"/><text x="115" y="136">TX A</text><text class="small" x="115" y="156">funding</text></g>
+            <g class="node tx" tabindex="0"><circle cx="340" cy="138" r="46"/><text x="340" y="136">TX B</text><text class="small" x="340" y="156">spend</text></g>
+            <g class="node tx" tabindex="0"><circle cx="565" cy="138" r="46"/><text x="565" y="136">TX C</text><text class="small" x="565" y="156">output</text></g>
+            <g class="node host" tabindex="0"><rect x="558" y="244" width="112" height="56" rx="14"/><text x="614" y="275">Relay host</text></g>
+            <g class="node asn" tabindex="0"><rect x="706" y="244" width="104" height="56" rx="14"/><text x="758" y="275">ASN</text></g>
+            <text class="note" x="200" y="122">UTXO</text><text class="note" x="420" y="122">UTXO</text>
+            <text class="note" x="460" y="224">observed TXID relay</text>
+          </svg><div class="legend"><span><i class="legend-value"></i> Exact value-flow facts</span><span><i class="legend-wire"></i> Observed relay</span><span><i class="legend-asn"></i> Context only</span></div>
+          </article><div class="alert"><strong>No owner inference.</strong> The host may have relayed TX C, but this does not mean that host controls its wallet or originated the transaction.</div>
+        </section>
+
+        <section id="view-pipeline" class="view"><div class="eyebrow">PHASE-BY-PHASE IMPLEMENTATION</div><h1>Analysis pipeline</h1><p class="lead">From lawful input to immutable evidential artifacts, with explicit blockers and fallback routes.</p>
+          <div class="pipeline-cards">
+            <div class="panel"><span class="number">P1</span><h2>Canonical data</h2><p>Bounded CSV/JSON/XML, UTXO validation, source hashes and quarantine. Independent wire sessions only where observed.</p><small>Implemented synthetic vertical slice</small></div>
+            <div class="panel"><span class="number">P2</span><h2>Graph and MCER</h2><p>Time-valid typed edges, partial H1–H5 pair evidence and cautious entity partition. False-merge benchmarking remains.</p><small>Partial research integration</small></div>
+            <div class="panel"><span class="number">P3</span><h2>Model evidence</h2><p>Chronological tabular OOF and optional GraphSAGE proxy. Δ/Π require genuine independent scientific premises.</p><small>Experimental / gated</small></div>
+            <div class="panel"><span class="number">P4</span><h2>Final risk & dashboard</h2><p>Frozen seed scores, ≤6-hop verified value-flow propagation, review pages, local FastAPI and case database.</p><small>Functional local demo; partial v4</small></div>
+            <div class="panel"><span class="number">P5</span><h2>Release & evaluation</h2><p>Independent temporal benchmarks, false-positive controls, model calibration and fully offline Linux acceptance.</p><small>Still requires evidence</small></div>
+          </div>
+        </section>
+
+        <section id="view-models" class="view"><div class="eyebrow">MODEL OPERATIONS</div><h1>Models & MLOps</h1><p class="lead">A demo model file is not automatically calibrated, safe or deployed. Model eligibility is determined by explicit artifact validation.</p>
+          <div class="twocol"><article class="panel"><div class="panel-heading"><h2>Inference connection</h2><span class="status-off">NOT CONFIGURED</span></div>
+              <p>The public showcase cannot load local models. In the offline app, use the validated JSON baseline artifact and matching feature contract. Unsafe pickle placeholders are intentionally refused.</p>
+              <button id="model-check" class="primary">Check model connection</button><p id="model-state" class="result" aria-live="polite">No model connected to the static showcase.</p>
+            </article>
+            <article class="panel"><div class="panel-heading"><h2>Research model families</h2></div>
+              <div class="model-line"><strong>Logistic regression · Random forest</strong><span>Uncalibrated baseline</span></div>
+              <div class="model-line"><strong>Isolation Forest</strong><span>Relative novelty ranking</span></div>
+              <div class="model-line"><strong>GraphSAGE / GAT</strong><span>Optional research dependencies</span></div>
+              <div class="model-line"><strong>MLflow</strong><span>Optional local tracking</span></div>
+            </article>
+          </div>
+          <div class="alert"><strong>Training vs inference.</strong> Run model fitting as a separate local development action with legitimate time-eligible labels. The dashboard never trains on uploaded case data automatically.</div>
+        </section>
+
+        <section id="view-cases" class="view"><div class="eyebrow">AUDITABLE INVESTIGATION</div><h1>Case review workspace</h1><p class="lead">Source-linked dossiers, tentative entity evidence and reviewer decisions are available in the local application. This page does not connect to a case database.</p>
+          <article class="panel"><div class="panel-heading"><h2>Sample dossier structure</h2><span class="chip">No real case records</span></div>
+          <table class="sample-table"><thead><tr><th>Evidence field</th><th>Review purpose</th><th>Availability</th></tr></thead><tbody>
+            <tr><td>Transaction/outpoint chain</td><td>Provenance-backed value flow</td><td>Local runtime</td></tr>
+            <tr><td>Motif witness IDs</td><td>Reason for reviewing a candidate</td><td>Source-dependent</td></tr>
+            <tr><td>Model score type</td><td>Novelty versus calibrated probability</td><td>Always explicit</td></tr>
+            <tr><td>Δ and Π evidence</td><td>Cross-layer/economic hypotheses</td><td>ABSTAIN when unavailable</td></tr>
+            <tr><td>Reviewer action history</td><td>Traceable local decisions</td><td>Local SQLite only</td></tr>
+          </tbody></table></article>
+        </section>
+
+        <section id="view-deployment" class="view"><div class="eyebrow">REPRODUCIBLE RELEASE</div><h1>Deploy without overstating readiness</h1><p class="lead">GitHub Pages hosts only this static introduction. Actual investigations run on a local or authorized offline Linux workstation.</p>
+          <article class="panel"><h2>Developer quickstart</h2><pre><code>git clone https://github.com/shanmukhdatta/CLARION.git
+cd CLARION
+python -m pip install -e . -r requirements-v4.txt -r requirements-demo.txt
+python scripts/submission_demo.py run --out artifacts/submission_demo --cases 10
+python scripts/release/check_submission.py --run artifacts/submission_demo/investigation
+clarion serve --run artifacts/submission_demo/investigation --port 8000</code></pre>
+            <p>Optional: install a compatible PyTorch and PyTorch Geometric build for GraphSAGE. Install MLflow only when local experiment tracking is desired.</p>
+          </article>
+          <div class="alert"><strong>GitHub Pages is not the backend.</strong> No wallet/IP evidence, model checkpoint, tokens or private investigator data is transmitted or hosted here.</div>
+        </section>
+        <footer>CLARION · evidence first · research prototype · <a href="https://github.com/shanmukhdatta/CLARION/blob/main/docs/IMPLEMENTATION_CHECKLIST.md">172-requirement audit</a></footer>
+      </div>
+    </main>
+  </div>
+  <script src="./showcase.js" defer></script>
+</body>
+</html>

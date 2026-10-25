@@ -46,13 +46,15 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Plan reproducible offline release and smoke checks.  
 **Consumes:** Verified frozen environments.  
 **Produces:** packaged workstation.  
-**Current direct-file inventory:** Blueprint stub: 2.
+**Current direct-file inventory:** Blueprint stub: 2, Executable source / config (validate): 2.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
 ### Files directly in this folder (release)
 | Entry | Technical responsibility | State |
 |---|---|---|
+| [`check_submission.py`](check_submission.py) | Read-only gate: refuse misleading model/data claims before an offline showcase. | Executable source / config (validate) |
+| [`container_entrypoint.sh`](container_entrypoint.sh) | Shell entrypoint | Executable source / config (validate) |
 | [`package_linux.sh`](package_linux.sh) | Shell entrypoint | Blueprint stub |
 | [`verify_offline.py`](verify_offline.py) | Python module | Blueprint stub |
 

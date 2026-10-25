@@ -1,0 +1,3 @@
+# Optional developer-only MLflow. Do not install in mandatory offline inference runtime.
+# Versions must be locked for the final release, then audited for licenses and advisories.
+mlflow>=2.19,<5
