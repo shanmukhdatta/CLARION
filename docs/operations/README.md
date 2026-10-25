@@ -42,13 +42,14 @@ Review [complete project structure](../../docs/architecture/repository-structure
 **Responsibility:** Evidence recovery, audit, review and case handling.  
 **Consumes:** Local investigator procedures.  
 **Produces:** runbook steps.  
-**Current direct-file inventory:** Specification or guide: 3.
+**Current direct-file inventory:** Specification or guide: 4.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
 ### Files directly in this folder (operations)
 | Entry | Technical responsibility | State |
 |---|---|---|
+| [`SUBMISSION_DEPLOYMENT.md`](SUBMISSION_DEPLOYMENT.md) | CLARION synthetic demo — DevOps runbook | Specification or guide |
 | [`case-operations.md`](case-operations.md) | ARCHITECTURE PLACEHOLDER ONLY — no runnable implementation | Specification or guide |
 | [`evidence-recovery.md`](evidence-recovery.md) | ARCHITECTURE PLACEHOLDER ONLY — no runnable implementation | Specification or guide |
 | [`offline-runbook.md`](offline-runbook.md) | ARCHITECTURE PLACEHOLDER ONLY — no runnable implementation | Specification or guide |

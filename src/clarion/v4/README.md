@@ -90,7 +90,7 @@ Detailed limitations and the remaining research steps are in the [feature-by-fea
 **Responsibility:** Import → as-of UTXO graph → uncertain evidence → novelty and leads.  
 **Consumes:** Approved canonical CSV/JSON/XML inputs.  
 **Produces:** case/risk/manifests.  
-**Current direct-file inventory:** Executable source / config (validate): 18, Package marker: 1.
+**Current direct-file inventory:** Executable source / config (validate): 21, Package marker: 1.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -102,10 +102,12 @@ Detailed limitations and the remaining research steps are in the [feature-by-fea
 | [`case_store.py`](case_store.py) | SQLite-backed local investigative case reviews with tamper-evident event chain. Lead scores are immutable | Executable source / config (validate) |
 | [`contracts.py`](contracts.py) | Versioned canonical evidence contracts. All money is integer satoshis. Only observed wire relations are a | Executable source / config (validate) |
 | [`evaluation.py`](evaluation.py) | Research validity: honest holdouts, bootstrap intervals and cohort reviews. No synthetic metric is presen | Executable source / config (validate) |
+| [`gnn_training.py`](gnn_training.py) | Optional CPU GraphSAGE self-supervised edge reconstruction and safe JSON inference. Research proxy only.  | Executable source / config (validate) |
 | [`graph.py`](graph.py) | As-of typed cross-layer evidence graph; exact UTXO transfer accounting. Host relays attach to transaction | Executable source / config (validate) |
 | [`ingest.py`](ingest.py) | Bounded canonical CSV/JSON/XML adapters and deterministic quarantine. Unrecognized provider columns are r | Executable source / config (validate) |
 | [`mcer.py`](mcer.py) | MCER v4 H1-H5 evidence ledger and conservative versioned partition hypotheses. This does not establish le | Executable source / config (validate) |
 | [`ml.py`](ml.py) | Temporal, group-safe supervised and unsupervised baselines with optional GNN. No object unpickling; predi | Executable source / config (validate) |
+| [`mlops_adapter.py`](mlops_adapter.py) | Local-only experiment metadata and optional MLflow logging. Experiments are not deployed models. Never lo | Executable source / config (validate) |
 | [`model_artifact.py`](model_artifact.py) | Safe JSON-serializable chronological logistic baseline, no pickle execution. Separate experimental superv | Executable source / config (validate) |
 | [`monitoring.py`](monitoring.py) | Offline feature drift and factual batch observability, not model self-training. | Executable source / config (validate) |
 | [`motifs_extended.py`](motifs_extended.py) | Additional explainable Bitcoin flow motifs, with careful address ambiguity. Transaction-value edges remai | Executable source / config (validate) |
@@ -115,6 +117,7 @@ Detailed limitations and the remaining research steps are in the [feature-by-fea
 | [`security.py`](security.py) | Offline operational trust boundaries for CLARION source and case files. | Executable source / config (validate) |
 | [`signals.py`](signals.py) | Data-gated chain/wire Δ and verified economic-goal Π signal candidates. These are research estimators wit | Executable source / config (validate) |
 | [`storage.py`](storage.py) | Optional local Parquet/DuckDB storage and SQLite case index. Parquet files are rebuildable from verified  | Executable source / config (validate) |
+| [`submission.py`](submission.py) | Offline SIH submission orchestration and independently checkable acceptance evidence. No synthetic data i | Executable source / config (validate) |
 | [`wire_sessions.py`](wire_sessions.py) | Observed P2P relay sessionization and contextual feature extraction. A TXID seen from a host is an observ | Executable source / config (validate) |
 
 ### Child modules and navigation (v4)

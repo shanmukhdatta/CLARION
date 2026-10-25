@@ -45,7 +45,7 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Preserve decisions and observed implementation status.  
 **Consumes:** Original CLARION architecture and code contracts.  
 **Produces:** traceable system documentation.  
-**Current direct-file inventory:** Specification or guide: 9.
+**Current direct-file inventory:** Executable source / config (validate): 1, Source asset / fixture: 2, Specification or guide: 10.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -61,6 +61,10 @@ Do not add executable logic before the assigned phase PR; update this README whe
 | [`IMPLEMENTATION_CHECKLIST.md`](IMPLEMENTATION_CHECKLIST.md) | CLARION — Requirements-to-code implementation checklist | Specification or guide |
 | [`IMPLEMENTATION_DECISIONS.md`](IMPLEMENTATION_DECISIONS.md) | CLARION implementation decisions | Specification or guide |
 | [`LOCAL_TESTING.md`](LOCAL_TESTING.md) | CLARION local setup, testing, and synthetic research | Specification or guide |
+| [`index.html`](index.html) | Versioned resource | Source asset / fixture |
+| [`showcase.css`](showcase.css) | Local styles | Executable source / config (validate) |
+| [`showcase.js`](showcase.js) | Versioned resource | Source asset / fixture |
+| [`submission-architecture.md`](submission-architecture.md) | CLARION submission integration: architecture, phase execution and honest status | Specification or guide |
 
 ### Child modules and navigation (docs)
 - [`adr/`](./adr/README.md) — Record approved architectural reasoning.

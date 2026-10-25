@@ -36,7 +36,7 @@ flowchart LR
 **Responsibility:** Check conservation, no ownership claims, null Π/Δ, and bounded scoring.  
 **Consumes:** Canonical v4 schemas and tiny synthetic UTXO fixtures.  
 **Produces:** focused regression suite.  
-**Current direct-file inventory:** Executable source / config (validate): 4.
+**Current direct-file inventory:** Executable source / config (validate): 7.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -45,7 +45,10 @@ flowchart LR
 |---|---|---|
 | [`test_case_store.py`](test_case_store.py) | Persistent review transitions, concurrency and audit chain checks. | Executable source / config (validate) |
 | [`test_extended_evidence.py`](test_extended_evidence.py) | Real verified evidence contracts for relay sessions, structural motifs and model serialization. | Executable source / config (validate) |
+| [`test_gnn_training_contract.py`](test_gnn_training_contract.py) | GraphSAGE parsing/cutoff tests, independent of heavyweight torch/PyG install. | Executable source / config (validate) |
+| [`test_model_api_submission.py`](test_model_api_submission.py) | Local model API readiness, no arbitrary artifact or implied crime probability. | Executable source / config (validate) |
 | [`test_review_api.py`](test_review_api.py) | Real FastAPI routes, auth refusal and hash check with fictional artifacts. | Executable source / config (validate) |
+| [`test_submission_extensions.py`](test_submission_extensions.py) | Submission tests without GPU, internet, MLflow or untrusted model files. | Executable source / config (validate) |
 | [`test_v4_static_pipeline.py`](test_v4_static_pipeline.py) | Focused v4 correctness contracts. Authored statically; NOT EXECUTED in this pass. | Executable source / config (validate) |
 
 ### Child modules and navigation (v4)

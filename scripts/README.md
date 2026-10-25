@@ -44,7 +44,7 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Generate fixtures, import, train and produce reports.  
 **Consumes:** Approved local CLI arguments.  
 **Produces:** reproducible run entrypoints.  
-**Current direct-file inventory:** Executable source / config (validate): 2.
+**Current direct-file inventory:** Executable source / config (validate): 3.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -52,6 +52,7 @@ Do not add executable logic before the assigned phase PR; update this README whe
 | Entry | Technical responsibility | State |
 |---|---|---|
 | [`demo.sh`](demo.sh) | Shell entrypoint | Executable source / config (validate) |
+| [`submission_demo.py`](submission_demo.py) | Generate and audit a real CLARION synthetic vertical slice; no fabricated outputs. | Executable source / config (validate) |
 | [`v4_pipeline.py`](v4_pipeline.py) | Static CLI for source-to-artifact CLARION v4 analysis. Run only after validating source licence, access p | Executable source / config (validate) |
 
 ### Child modules and navigation (scripts)
