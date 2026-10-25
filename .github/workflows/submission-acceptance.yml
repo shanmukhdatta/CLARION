@@ -28,6 +28,20 @@ jobs:
       - run: python -m ruff check src/clarion/v4 scripts/submission_demo.py scripts/train/run_submission_gnn.py scripts/train/record_mlflow.py scripts/release/check_submission.py tests/v4
       - run: python scripts/submission_demo.py run --out /tmp/clarion-submission --cases 10 --seed 26
       - run: python scripts/release/check_submission.py --run /tmp/clarion-submission/investigation
+      - name: Full synthetic training, holdout inference and v4 flow
+        run: |
+          python scripts/full_demo_pipeline.py --out /tmp/clarion-full --cases 36 --seed 26
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/clarion-full')
+          report=json.loads((root/'DEMO_REPORT.json').read_text())
+          assert report['training_status']=='SYNTHETIC_EXPERIMENT_ONLY'
+          assert report['evidence_inspector']['result']=='VALIDATED_DEMO_ARTIFACT_CONTRACT'
+          assert (root/'training/predictions.json').exists()
+          assert (root/'investigation/training_experiment.json').exists()
+          print('Verified actual synthetic training and inference artifacts')
+          PY
       - run: python scripts/train/record_mlflow.py --run /tmp/clarion-submission/investigation --out /tmp/clarion-submission/mlops
       - name: Print exact generated README updates for maintainer sync
         run: |

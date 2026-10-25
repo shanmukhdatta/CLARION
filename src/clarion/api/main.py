@@ -57,6 +57,7 @@ def create_app(run_dir: Path) -> FastAPI:
             "propagation.json", "features.json", "entities.json",
             "wire_sessions.json", "wire_features.json",
             "mcer_evidence.json", "mcer_partition.json", "monitoring.json",
+            "training_experiment.json",
         }
         if name not in allowed:
             raise HTTPException(404, "unknown run resource")
@@ -79,6 +80,11 @@ def create_app(run_dir: Path) -> FastAPI:
                 "Cache-Control": "no-store",
             })
         return HTMLResponse(HOME, headers={"Content-Security-Policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'"})
+
+    @app.get("/api/experiments/demo")
+    def synthetic_training_experiment():
+        """Return precomputed fictional training evidence, not live training."""
+        return read("training_experiment.json")
 
     @app.get("/api/models/readiness")
     def get_model_readiness():

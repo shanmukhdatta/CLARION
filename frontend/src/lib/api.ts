@@ -110,3 +110,19 @@ export async function getExperimentalPrediction(txid: string): Promise<{
   if (!/^[a-f0-9]{64}$/.test(txid)) throw new Error("Invalid transaction ID");
   return request(`/models/experimental/${txid}`);
 }
+
+export interface DemoTrainingExperiment {
+  training_status: string;
+  model_status: string;
+  model_families: string[];
+  meta_model: string;
+  training_protocol: string;
+  metrics_synthetic_only: Record<string, number>;
+  important: string;
+  mlops_tracking?: string;
+}
+
+export async function getSyntheticTrainingExperiment(): Promise<DemoTrainingExperiment | null> {
+  try { return await request<DemoTrainingExperiment>("/experiments/demo"); }
+  catch { return null; } // Files are optional; a missing report must never be fabricated.
+}

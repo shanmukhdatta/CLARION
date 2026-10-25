@@ -8,7 +8,7 @@ import {
   ShieldQuestion, SlidersHorizontal, Sparkles, Waypoints, X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { exportCaseAsJson, getModelReadiness, loadWorkspace } from "../lib/api";
+import { exportCaseAsJson, getModelReadiness, getSyntheticTrainingExperiment, loadWorkspace } from "../lib/api";
 import CasesPage from "../features/cases/CasesPage";
 import type { GraphData, GraphEdge, Lead, Motif, Priority, WorkspaceData } from "../lib/types";
 
@@ -410,6 +410,23 @@ function PropagationPage({data}:{data:WorkspaceData}){
   </>;
 }
 
+function SyntheticTrainingStatus() {
+  const [report,setReport]=useState<{training_status:string;model_families:string[];meta_model:string;metrics_synthetic_only:Record<string,number>;important:string}|null>(null);
+  useEffect(()=>{getSyntheticTrainingExperiment().then(setReport);},[]);
+  return <section className="card" style={{marginTop:18}}>
+    <div className="card-heading"><h2>Synthetic training experiment</h2>
+      <Tag kind="warn">{report?.training_status ?? "NO TRAINING REPORT"}</Tag></div>
+    {!report ? <p style={{fontSize:12,color:"var(--muted)"}}>Run the local full-demo training pipeline to generate actual measured synthetic metrics. This page does not invent results.</p> :
+      <>
+        <Info name="Trained families" value={report.model_families.join(" · ")}/>
+        <Info name="OOF stack" value={report.meta_model}/>
+        {Object.entries(report.metrics_synthetic_only).map(([metric,value])=>
+          <Info key={metric} name={readable(metric)} value={String(value)}/>)}
+        <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.7}}>{report.important}</p>
+      </>}
+  </section>;
+}
+
 function ModelConnectionStatus() {
   const [model,setModel]=useState<{status:string;detail:string}|null>(null);
   const [error,setError]=useState<string|null>(null);
@@ -468,6 +485,7 @@ function StatusPage({data,kind,onSelect}:{data:WorkspaceData;kind:Page;onSelect:
       <Info name="Predictor warning" value="Scores ≠ illicit probability"/>
       <ModelConnectionStatus/>
     </div>
+    <SyntheticTrainingStatus/>
   </>;
   if(kind==="audit") return <>
     <PageHeader eyebrow="Evidence integrity" title="Provenance audit"

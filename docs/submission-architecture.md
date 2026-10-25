@@ -67,3 +67,12 @@ CI should pass Python tests, Ruff in the affected v4 directory, canonical 36-cas
 - Verify no IP-to-wallet ownership edges and honest Δ/Π abstention.
 - Run local FastAPI/React for genuine interactions; GitHub Pages only showcases architecture.
 - For unresolved features, use the [requirements audit](IMPLEMENTATION_CHECKLIST.md) rather than claiming that placeholder modules are complete.
+
+## Single-command synthetic ML + evidence integration (submission-stage extension)
+
+```bash
+python scripts/full_demo_pipeline.py --out artifacts/full_demo --cases 36 --seed 26
+clarion serve --run artifacts/full_demo/investigation --port 8000
+```
+
+This actually runs a **fictional** chronology/grouped out-of-fold Logistic Regression / Random Forest / Isolation Forest stack; saves the measured `training/training_report.json` and future-only `predictions.json`; runs the separate historical synthetic inference example; then builds and audits the primary v4 **unsupervised** evidence investigation. It writes a real `investigation/training_experiment.json` consumed by `GET /api/experiments/demo`, which is surfaced on the dashboard's Models page. No trained checkpoint is falsely declared ready. Optional MLflow writes local aggregate metrics; if MLflow is absent the JSON tracker still records them. Synthetic perfect results can arise from generator simplicity and cannot establish real-world generalization.
