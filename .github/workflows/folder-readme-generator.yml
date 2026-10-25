@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - docs/architecture-folder-guides-20261022
-      - implementation/full-requirements-integration-20261022\n      - implementation/submission-blue-mlops-20261025
+      - implementation/full-requirements-integration-20261022
+      - implementation/submission-blue-mlops-20261025
     paths:
       - scripts/docs/generate_folder_readmes.py
       - .github/workflows/folder-readme-generator.yml
