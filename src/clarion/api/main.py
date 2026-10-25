@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 
 from fastapi import APIRouter, FastAPI, HTTPException, Query
@@ -78,6 +79,40 @@ def create_app(run_dir: Path) -> FastAPI:
                 "Cache-Control": "no-store",
             })
         return HTMLResponse(HOME, headers={"Content-Security-Policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'"})
+
+    @app.get("/api/models/readiness")
+    def get_model_readiness():
+        """Safe read-only model status; never deserialize or run user-provided model code."""
+        from clarion.v4.submission import model_readiness
+
+        return model_readiness(os.environ.get("CLARION_MODEL_ARTIFACT"))
+
+    @app.get("/api/models/experimental/{txid}")
+    def predict_model(txid: str):
+        """Research inference only, with run/feature/time and artifact-validation gates."""
+        from clarion.v4.model_artifact import load_model_artifact, predict_json_logistic
+        from clarion.v4.submission import model_readiness
+
+        if len(txid) != 64 or any(ch not in "0123456789abcdef" for ch in txid):
+            raise HTTPException(422, "invalid transaction id")
+        model_path = os.environ.get("CLARION_MODEL_ARTIFACT")
+        status = model_readiness(model_path)
+        if status["status"] != "EXPERIMENTAL_UNCALIBRATED":
+            raise HTTPException(409, status["status"])
+        rows = [row for row in read("features.json") if row.get("subject_id") == txid]
+        if not rows:
+            raise HTTPException(404, "feature row not present in local run")
+        try:
+            artifact = load_model_artifact(Path(model_path))
+            predictions = predict_json_logistic(artifact, rows)
+        except (ValueError, TypeError, KeyError, OverflowError) as exc:
+            raise HTTPException(409, "artifact incompatible with current run feature/time contract") from exc
+        return {
+            "status": "EXPERIMENTAL_UNCALIBRATED",
+            "score_type": "SUPERVISED_UNCALIBRATED_NOT_ILLICIT_PROBABILITY",
+            "prediction": predictions[0],
+            "warning": "Experimental classifier signal only. Not used to modify case priority.",
+        }
 
     @app.get("/api/manifest")
     def manifest():

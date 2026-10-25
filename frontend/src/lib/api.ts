@@ -90,3 +90,23 @@ export async function exportCaseAsJson(lead: Lead, manifest: RunManifest): Promi
     URL.revokeObjectURL(url);
   }
 }
+
+/** Model operations are read-only. No model weights or private evidence are uploaded. */
+export interface ModelReadiness {
+  status: string;
+  detail: string;
+}
+
+export async function getModelReadiness(): Promise<ModelReadiness> {
+  return request<ModelReadiness>("/models/readiness");
+}
+
+export async function getExperimentalPrediction(txid: string): Promise<{
+  status: string;
+  score_type: string;
+  prediction: { score: number; subject_id: string };
+  warning: string;
+}> {
+  if (!/^[a-f0-9]{64}$/.test(txid)) throw new Error("Invalid transaction ID");
+  return request(`/models/experimental/${txid}`);
+}

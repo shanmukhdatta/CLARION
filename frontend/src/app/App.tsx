@@ -8,7 +8,7 @@ import {
   ShieldQuestion, SlidersHorizontal, Sparkles, Waypoints, X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { exportCaseAsJson, loadWorkspace } from "../lib/api";
+import { exportCaseAsJson, getModelReadiness, loadWorkspace } from "../lib/api";
 import CasesPage from "../features/cases/CasesPage";
 import type { GraphData, GraphEdge, Lead, Motif, Priority, WorkspaceData } from "../lib/types";
 
@@ -410,6 +410,35 @@ function PropagationPage({data}:{data:WorkspaceData}){
   </>;
 }
 
+function ModelConnectionStatus() {
+  const [model,setModel]=useState<{status:string;detail:string}|null>(null);
+  const [error,setError]=useState<string|null>(null);
+  const [loading,setLoading]=useState(false);
+  const check=()=>{
+    setLoading(true);
+    setError(null);
+    getModelReadiness()
+      .then(setModel)
+      .catch((reason:unknown)=>setError(reason instanceof Error?reason.message:String(reason)))
+      .finally(()=>setLoading(false));
+  };
+  useEffect(()=>{check();},[]);
+  return <div style={{marginTop:21,paddingTop:18,borderTop:"1px solid var(--border)"}}>
+    <div className="card-heading"><h2>Local model connection</h2>
+      <button type="button" className="secondary-btn" onClick={check} disabled={loading}>
+        <RefreshCw size={14}/> {loading?"Checking…":"Check connection"}
+      </button>
+    </div>
+    <Info name="Model status" value={error?"CONNECTION_UNAVAILABLE":model?.status??"NOT_CHECKED"}/>
+    <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.7}}>
+      {error??model?.detail??"Checking the local API. No unverified model is used in the lead ranking."}
+    </p>
+    <p style={{fontSize:11,color:"var(--muted)"}}>
+      A connected artifact remains experimental and never silently replaces current case scores.
+    </p>
+  </div>;
+}
+
 function StatusPage({data,kind,onSelect}:{data:WorkspaceData;kind:Page;onSelect:(lead:Lead)=>void}){
   const {manifest}=data;
   if(kind==="entities") return <>
@@ -437,6 +466,7 @@ function StatusPage({data,kind,onSelect}:{data:WorkspaceData;kind:Page;onSelect:
       <Info name="Real-world validation" value="Not established"/>
       <Info name="External benchmark" value="Not supplied"/>
       <Info name="Predictor warning" value="Scores ≠ illicit probability"/>
+      <ModelConnectionStatus/>
     </div>
   </>;
   if(kind==="audit") return <>

@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from clarion.v4.submission import inspect_run, make_demo
 
+from clarion.v4.submission import inspect_run, make_demo
 
 
 def main() -> int:
