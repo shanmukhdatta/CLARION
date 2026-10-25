@@ -63,3 +63,23 @@ jobs:
           assert 'No owner inference.' in html
           print('Static showcase safety/status labels verified')
           PY
+
+  container-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Compose configuration
+        run: docker compose config --quiet
+      - name: Build and start localhost-only fictional demo
+        run: |
+          docker compose up -d --build --wait --wait-timeout 180
+          curl --fail --silent --show-error http://127.0.0.1:8000/api/health
+          curl --fail --silent --show-error http://127.0.0.1:8000/api/models/readiness
+          curl --fail --silent --show-error http://127.0.0.1:8000/api/provenance/verify
+      - name: Show diagnostics and stop
+        if: always()
+        run: |
+          docker compose ps || true
+          docker compose logs --tail=80 || true
+          docker compose down || true
