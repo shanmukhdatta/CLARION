@@ -5,6 +5,24 @@
 **Target:** Linux, offline inference · **Repository status: functional synthetic demo with incomplete research and deployment validation**  
 **Current stage (October 25, 2026):** Executable synthetic research demo, local FastAPI/React investigation workspace, tested canonical pipeline and experimental models are present. **The full v4 research architecture is NOT yet scientifically validated or release-certified.** Real P2P/sensor joins, Δ/Π economic premises and calibrated real-world classifications remain unverified. This paragraph supersedes the historical scaffold status below.
 
+## Resume implementation — 31 October 2026 (read before coding)
+
+**Verified repository snapshot:** `main` commit `34739e4` was inspected on 31 October 2026. GitHub Actions checks on that commit passed; this is **not** a claim of real-world transaction-crime detection accuracy or a fresh local rerun. The 172-item requirement ledger reports **59 narrowly implemented/tested, 39 written but not fully accepted, 37 partial, 29 missing and 8 externally blocked**. Many older `src/clarion/` modules are explicitly blueprint-only; working functionality is concentrated in `src/clarion/v4/`, `src/clarion/application/`, `src/clarion/api/` and the React app. Keep and extend existing functionality.
+
+**Start here:**
+1. [Current audit with source and CI evidence](docs/progress/CURRENT_AUDIT_2026-10-31.md) — current baseline, confirmed scope and honest gaps.
+2. [**Agent execution master prompt**](docs/development/AGENT_EXECUTION_PROMPT.md) — the authoritative *implement, test and commit* sequence for a repo-aware coding agent.
+3. [172-requirement checklist](docs/IMPLEMENTATION_CHECKLIST.md) and [full architecture specification](docs/architecture/architecture-v4-spec.md) — complete scope and statuses.
+4. [Actual environment and test commands](docs/LOCAL_TESTING.md) — verify before changing code.
+
+**Mandatory delivery sequence:** repository baseline → **exactly 24 fictional Bitcoin transaction rows**, with correctly sized inputs/outputs/observations and isolated truth sidecar → network/P2P observation layer → UTXO Bitcoin layer → as-of cross-layer graph → features/MCER/motifs/Δ/Π evidence gates → 36+ case supervised demo training → trained/evaluated graph models → bounded priority/propagation → functional React/API/cases → offline regression/release → independently validated research data.
+
+**Mini fixture first, models later:** the existing `generate-demo --cases 6 --seed 26` generator produces **24 synthetic transaction records** (four per case), *not* a 24-row total across all related tables. This golden mini24 fixture still needs to be explicitly committed/validated under `data/samples/mini24/`. The current supervised training demonstration requires **at least 30 cases / 75 labeled spend transactions**, so mini24 must be used to validate engineering contracts, not to claim fair trained-model performance. For a smoke test with model fitting, use `python scripts/full_demo_pipeline.py --out artifacts/full_demo --cases 36 --seed 26`.
+
+**Do not conflate:** a P2P relay host with an originating wallet, a novelty/risk-priority rank with criminal probability, or a toy dataset with external verification. If true paired evidence/verified economic objectives are absent, `Δ` and `Π` must show `ABSTAIN`. All evidence/time/provenance guarantees remain mandatory.
+
+---
+
 ### Submission demonstration and blue/white investigator UI (October 25, 2026)\n\nStart with [submission integration and 20-stage checklist](docs/submission-architecture.md), [static GitHub Pages showcase](docs/index.html), and [actual local setup](docs/LOCAL_TESTING.md). The showcase does not perform ML inference; use the local application for real interactions. Models show explicit not-configured states until trained and verified.\n\n### Start implementing CLARION — follow this first
 
 **[Beginner-friendly phase-by-phase implementation playbook](docs/development/implementation-playbook.md)** — the practical starting point for a new contributor. It explains the recommended **technology stack and libraries**, where to obtain **real Bitcoin datasets**, how to **generate synthetic CSV/JSON/XML when official data is missing**, how to structure and train baseline/GNN/stacked models without data leakage, what each existing repository module should implement, what deliverables to produce, and the **P0–P5 acceptance gates**. It also lists planned CLI interfaces clearly marked **not yet implemented**.
