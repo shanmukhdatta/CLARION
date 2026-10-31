@@ -50,13 +50,14 @@ Do not add executable logic before the assigned phase PR; update this README whe
 **Responsibility:** Document what is complete versus unfinished.  
 **Consumes:** Phase gates P0–P5.  
 **Produces:** decision/acceptance history.  
-**Current direct-file inventory:** Specification or guide: 6.
+**Current direct-file inventory:** Specification or guide: 7.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
 ### Files directly in this folder (progress)
 | Entry | Technical responsibility | State |
 |---|---|---|
+| [`CURRENT_AUDIT_2026-10-31.md`](CURRENT_AUDIT_2026-10-31.md) | CLARION repository status and restart audit — 31 October 2026 | Specification or guide |
 | [`phase-00-architecture.md`](phase-00-architecture.md) | Phase 0 — Architecture review and implementation gates | Specification or guide |
 | [`phase-01-foundation.md`](phase-01-foundation.md) | phase-01-foundation.md — planned content | Specification or guide |
 | [`phase-02-graph-entity-patterns.md`](phase-02-graph-entity-patterns.md) | phase-02-graph-entity-patterns.md — planned content | Specification or guide |
