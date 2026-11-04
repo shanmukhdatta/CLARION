@@ -2,6 +2,12 @@
 
 > **Design documentation only.** The original uploaded CLARION v4 PDF supplies blocks 0–12; linked implementation choices and status are proposed and not verified as code. The docs listed below replace earlier TODOs where indicated.
 
+## Start implementation without roadmap ambiguity
+
+- [Autonomous execution handoff and phase crosswalk](EXECUTION_HANDOFF_AND_PHASE_MAP.md) — declares the authoritative execution prompt, maps its phases to the master technical plan, defines autonomous stop/go rules, task evidence ledger, environment checks and the exact Phase 1 mini24 acceptance gate.
+- [Agent execution master prompt](AGENT_EXECUTION_PROMPT.md) — controlling code-first implementation sequence.
+- [Master technical implementation plan](CLARION_V4_MASTER_IMPLEMENTATION_PLAN.md) — technical architecture and design reference.
+
 ## Detailed contracts
 
 - [Master technical implementation plan](CLARION_V4_MASTER_IMPLEMENTATION_PLAN.md) — complete architecture, technology stack, datasets, algorithms, phases and acceptance gates.
