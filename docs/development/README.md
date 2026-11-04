@@ -4,6 +4,7 @@
 
 ## Detailed contracts
 
+- [Master technical implementation plan](CLARION_V4_MASTER_IMPLEMENTATION_PLAN.md) — complete architecture, technology stack, datasets, algorithms, phases and acceptance gates.
 - [Architecture, implementation and verification definition of done](definition-of-done.md)
 - [Developer workflow planning (additional details pending implementation)](developer-guide.md)
 - [Branch/PR workflow planning (additional details pending implementation)](git-workflow.md)
@@ -30,7 +31,7 @@ Review the [source-to-requirement audit](../architecture/REQUIREMENTS_AUDIT.md) 
 **Responsibility:** Help beginners reproduce the demo and later validate v4.  
 **Consumes:** Developer quickstarts and acceptance logs.  
 **Produces:** reproducible commands.  
-**Current direct-file inventory:** Specification or guide: 10.
+**Current direct-file inventory:** Specification or guide: 11.
 
 **Important:** Status is assessed per file; an architectural contract does not prove executable implementation. In particular, CLARION's core running code is primarily `src/clarion/application/engine.py`, `src/clarion/application/training_demo.py`, `src/clarion/api/main.py` and `src/clarion/v4/`, with the React screens in `frontend/src/app/App.tsx`. Other files may be placeholders.
 
@@ -38,6 +39,7 @@ Review the [source-to-requirement audit](../architecture/REQUIREMENTS_AUDIT.md) 
 | Entry | Technical responsibility | State |
 |---|---|---|
 | [`AGENT_EXECUTION_PROMPT.md`](AGENT_EXECUTION_PROMPT.md) | MASTER EXECUTION PROMPT — CLARION v4 end-to-end completion | Specification or guide |
+| [`CLARION_V4_MASTER_IMPLEMENTATION_PLAN.md`](CLARION_V4_MASTER_IMPLEMENTATION_PLAN.md) | End-to-end architecture, technology, datasets, algorithm logic, phases and acceptance | Specification or guide |
 | [`DEMO_TEST_EVIDENCE.md`](DEMO_TEST_EVIDENCE.md) | Local execution evidence — October 22, 2026 | Specification or guide |
 | [`RUNNABLE_DEMO.md`](RUNNABLE_DEMO.md) | CLARION v4 — runnable offline synthetic demonstration | Specification or guide |
 | [`V4_BEGINNER_START_HERE.md`](V4_BEGINNER_START_HERE.md) | CLARION v4: from scratch to research validation (no invented results) | Specification or guide |
