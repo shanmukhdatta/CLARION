@@ -162,3 +162,16 @@ Commands are intent and starting points from the inspected repository, not claim
 ## F. Agent's immediate first deliverable
 
 **Do not ask the user for new architectural ideas or another generic plan.** Begin by verifying the current repo and code, and implement **Phase 1** completely: a committed, source-hashed, tested **24-transaction** fictional mini24 fixture (with all associated CSV tables and source/truth separation), running through existing validation and canonical analysis, with a real commit and precise acceptance output. Continue to Phase 2 only after Phase 1 passes. Persist working changes and meaningful commits for subsequent phases until the synthetic end-to-end system is integrated. Where real data/evidence is unavailable, finish executable evidence-gated interfaces and report those specific blocks honestly rather than fabricating validation.
+
+
+---
+
+## Autonomous P0–P9 handoff (5 November 2026)
+
+The authoritative phase sequence is P0–P9 in `CLARION_V4_MASTER_IMPLEMENTATION_PLAN.md`. Read `AUTONOMOUS_EXECUTION_CONTRACT.md` and maintain `../progress/PHASE_IMPLEMENTATION_LEDGER.md` as the single phase-level status ledger. The older 11 work packages map into P0–P9; do not create Phase 10/11 or treat legacy P0–P5 playbooks as competing roadmaps.
+
+**Do not ask the user to choose routine libraries, helper names, tests, files or ordinary implementation details.** Inspect existing code and tests, choose the simplest consistent implementation, record the decision and proceed. Pause only for legal/permission/account authorization, destructive actions or an architecture-changing research decision not resolved by the approved plan. If real data is missing, complete the synthetic/chain-only fallback and mark only dependent claims DATA_BLOCKED.
+
+Execute P0 through P9 in order. P0 must refresh the main SHA, map all 172 REQ IDs to actual source owners/tests, run and log baseline checks, inventory data rights/semantics, reconcile Python/npm dependencies and freeze the first slice. P1 must deliver deterministic fictional mini24 with exactly 24 transaction records, CSV/JSON/XML parity, provenance, integer satoshi/outpoint invariants and synthetic-truth isolation. The subsequent phase gates, autonomous rules, environment caveats and evidence requirements are defined in the contract and ledger.
+
+**Environment caveat at 5 Nov 2026:** `uv.lock` does not include all v4/demo extras from `requirements-v4.txt` and `requirements-demo.txt`; frontend `package-lock.json` is absent. Follow `docs/LOCAL_TESTING.md` meanwhile. Do not treat `uv sync --locked` alone as a complete v4 setup or run `npm ci` before a lockfile exists. Never claim a test passed unless executed.
