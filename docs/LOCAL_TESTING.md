@@ -2,6 +2,10 @@
 
 Use a Python 3.11–3.12 virtual environment on Linux or WSL. The review UI is a local single-user experiment. This project does **not** contain genuine P2P capture or permissioned labeled investigation data.
 
+## Dependency-lock caveat (5 November 2026)
+
+At this baseline, `uv.lock` covers the minimal project/development dependencies, not every runtime extra in `requirements-v4.txt` and `requirements-demo.txt`. The frontend has `package.json` but no committed `package-lock.json`. These commands are the current documented setup, not proof of a fully locked environment. P0 must reconcile and validate both lockfiles. Do not use `uv sync --locked` alone as the complete v4 setup, and do not run `npm ci` before a lockfile exists.
+
 ## Get code and install\n\nFor the October 25 submission path and explicit research limitations, see [submission integration](submission-architecture.md).
 
 ```bash
