@@ -4,11 +4,15 @@
 > **Project:** SIH'26 — CLARION v4 / SIH26146  
 > **Repository:** [shanmukhdatta/CLARION](https://github.com/shanmukhdatta/CLARION)  
 > **Target branch:** `main`  
-> **Prepared:** 4 November 2026  
+> **Prepared:** 4 November 2026
+
+> **Execution handoff revision:** 5 November 2026. See [Autonomous Implementation Contract](AUTONOMOUS_EXECUTION_CONTRACT.md) and [P0–P9 Phase Implementation Ledger](../progress/PHASE_IMPLEMENTATION_LEDGER.md). These operationalize this architecture; they do not create a second roadmap.  
 > **Repository baseline inspected:** `main` at `7b8ef4c9b7500230a86bf5820dcc9e058857fecc` (31 October 2026)  
 > **Latest detailed progress audit reviewed:** `docs/progress/CURRENT_AUDIT_2026-10-31.md`, whose source audit is based on commit `34739e433a60534775f014f400166ef9343464a4` (25 October 2026).
 
 ---
+
+> **Reproducibility note (5 November 2026):** the current `uv.lock` does not lock every runtime extra in `requirements-v4.txt` and `requirements-demo.txt`; the frontend has no committed `package-lock.json`. Therefore `uv sync --locked` alone is not a complete v4 install and `npm ci` is not yet usable. Follow `docs/LOCAL_TESTING.md`; P0 must reconcile both dependency sources and validate clean installs.
 
 ## 0. How to use this plan
 

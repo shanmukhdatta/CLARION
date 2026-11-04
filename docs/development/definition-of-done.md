@@ -53,3 +53,23 @@ Signoff may be **conditional** while actual SIH data is unavailable; the remaini
 - Repeated unknowns or blockers remain explicit in progress tracker and README until tested.
 
 The detailed source-to-requirement audit is [REQUIREMENTS_AUDIT](../architecture/REQUIREMENTS_AUDIT.md).
+
+
+## Canonical phase gates (5 November 2026)
+
+Current task status is maintained only in [Phase Implementation Ledger](../progress/PHASE_IMPLEMENTATION_LEDGER.md). A design document does not prove code exists; code does not prove tests pass; tests do not prove real-world research claims.
+
+| Phase | Minimum acceptance evidence |
+|---|---|
+| P0 | Current SHA, 172-REQ/source/test map, baseline logs, data-rights inventory, dependency plan and canonical owners |
+| P1 | Exactly 24 mini24 transaction records, versioned contracts, CSV/JSON/XML parity, provenance, satoshi/outpoint and truth-isolation tests |
+| P2 | Independent chain/wire contracts, exact observed TXID provenance, UTXO tests and CHAIN_ONLY fallback |
+| P3 | Six node types, typed source-backed edges, deterministic as-of snapshots and future-edge tests |
+| P4 | MCER proposal/merge lineage, conflict handling, motif witnesses and benign hard-negative tests |
+| P5 | Valid chronological splits, classical baselines, OOF leakage tests and optional justified GNN |
+| P6 | Delta/Pi eligibility and ABSTAIN behavior; frozen pass-1 score/seed hash |
+| P7 | Verified value-share propagation, six-hop bound, 25/100 cap and no contextual re-emission |
+| P8 | API/UI E2E on real run artifacts, evidence drill-down, redaction and export hashes |
+| P9 | Separate dataset reports, ablations, security evidence and clean offline Linux reproduction |
+
+Status vocabulary: UNASSESSED, IN_PROGRESS, IMPLEMENTED_UNTESTED, TESTED, VERIFIED, DATA_BLOCKED, FAILED. Only reproducible evidence can promote a task to VERIFIED. Missing external data blocks only the dependent claim; safe deterministic implementation must continue.

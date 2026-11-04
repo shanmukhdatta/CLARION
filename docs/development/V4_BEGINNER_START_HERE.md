@@ -10,7 +10,7 @@ Python 3.11 or 3.12:
 ```bash
 git clone https://github.com/shanmukhdatta/CLARION.git
 cd CLARION
-git switch implementation/v4-static-code-orange-ui-20261022
+git switch main
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e . -r requirements-v4.txt pytest
@@ -106,3 +106,10 @@ evaluation before any accuracy claim. Synthetic AUROC is not real AML AUROC.
 
 Full interfaces: [schemas](V4_PIPELINES_AND_SCHEMAS.md).
 Honest status: [implementation audit](V4_STATIC_IMPLEMENTATION_STATUS.md).
+
+
+## Current autonomous handoff (5 November 2026)
+
+Start from latest `main`. Follow [Autonomous Implementation Contract](AUTONOMOUS_EXECUTION_CONTRACT.md), then the [Master Technical Implementation Plan](CLARION_V4_MASTER_IMPLEMENTATION_PLAN.md), [Phase Implementation Ledger](../progress/PHASE_IMPLEMENTATION_LEDGER.md), and [Local Testing](../LOCAL_TESTING.md). The authoritative sequence is P0–P9; older phase labels are historical.
+
+The current `uv.lock` does not cover all v4/demo extras and frontend `package-lock.json` is absent. Use the documented local testing commands until P0 reconciles and validates the lockfiles. Do not assume `uv sync --locked` installs the full v4 runtime; do not use `npm ci` without a lockfile. Begin with P0 audit and P1 mini24, not model training or dashboard expansion.
